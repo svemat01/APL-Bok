@@ -139,7 +139,7 @@ export const TeacherPage = () => {
         <>
             <div className='bg-neutral-700 bg-opacity-50 xl:container xl:mx-auto mx-4 mt-4 px-10 pt-0 pb-4 rounded-xl '>
                 <div className="text-center p-6">
-                    <h1 className="text-3xl">Välkommen lärare</h1>
+                    <h1 className="text-3xl">Välkommen lärare</h1>-
                 </div>
 
                 <div className='bg-neutral-700 px-10 py-6 rounded-lg grid gap-8 text-black'>
