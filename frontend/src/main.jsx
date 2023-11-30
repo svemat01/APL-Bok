@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import './index.css'
 import { Welcome } from './pages/Login.jsx';
+import { TeacherPage } from './pages/teacher.jsx';
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: "/welcome2",
         element: <Welcome />,
+      },
+      {
+        path: "/teacher",
+        element: <TeacherPage />,
       },
     ],
   },
