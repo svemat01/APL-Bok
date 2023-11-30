@@ -8,7 +8,7 @@ import {
 import './index.css'
 import { Welcome } from './pages/Login.jsx';
 import { TeacherPage } from './pages/teacher.jsx';
-import { CreateStudentPage } from './pages/skapaelev.jsx';
+import { CreateStudentPage } from './pages/CreateStudent.jsx';
 
 const router = createBrowserRouter([
   {
@@ -23,7 +23,7 @@ const router = createBrowserRouter([
         element: <Welcome />,
       },
       {
-        path: "/skapaelev",
+        path: "/create-student",
         element: <CreateStudentPage />,
       },
       {
