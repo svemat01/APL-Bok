@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import './index.css'
 import { Welcome } from './pages/Login.jsx';
-import { TeacherPage } from './pages/teacher.jsx';
+import { TeacherPage } from './pages/Teacher.jsx';
 
 const router = createBrowserRouter([
   {
