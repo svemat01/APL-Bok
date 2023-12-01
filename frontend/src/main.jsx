@@ -7,9 +7,13 @@ import {
 } from "react-router-dom";
 import './index.css'
 import { Welcome } from './pages/Login.jsx';
+<<<<<<< Updated upstream
 import { TeacherPage } from './pages/teacher.jsx';
 import { CreateStudentPage } from './pages/CreateStudent.jsx';
 
+=======
+import { CreateStudentPage } from './pages/skapaelev.jsx';
+>>>>>>> Stashed changes
 const router = createBrowserRouter([
   {
     path: "/",
@@ -23,7 +27,11 @@ const router = createBrowserRouter([
         element: <Welcome />,
       },
       {
+<<<<<<< Updated upstream
         path: "/create-student",
+=======
+        path: "/skapaelev",
+>>>>>>> Stashed changes
         element: <CreateStudentPage />,
       },
       {
