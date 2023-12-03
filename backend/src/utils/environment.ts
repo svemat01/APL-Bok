@@ -1,5 +1,6 @@
-import { cleanEnv, port } from 'envalid';
+import { cleanEnv, port, str } from 'envalid';
 
-export const env = cleanEnv(process.env, {
-    PORT: port({default: 3000})
+export const ENV = cleanEnv(process.env, {
+    PORT: port({default: 3000}),
+    COOKIE_SECRET: str({default: 'SampleSecret'}),
 });
