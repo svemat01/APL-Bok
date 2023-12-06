@@ -9,6 +9,8 @@ import './index.css'
 import { Welcome } from './pages/Login.jsx';
 import { TeacherPage } from './pages/teacher.jsx';
 import { CreateStudentPage } from './pages/CreateStudent.jsx';
+import { Createapl } from './pages/Createapl.jsx';
+import { Rapport } from './pages/Rapport.jsx';
 
 const router = createBrowserRouter([
   {
@@ -33,6 +35,14 @@ const router = createBrowserRouter([
       {
         path: "/teacher",
         element: <TeacherPage />,
+      },
+      {
+        path: "/Createapl",
+        element: <Createapl />,
+      },
+      {
+        path: "/Rapport",
+        element: <Rapport />,
       },
     ],
   },
