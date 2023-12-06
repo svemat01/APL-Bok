@@ -1,4 +1,5 @@
 import { Static, t } from "elysia";
+import { ENV } from './environment.ts';
 
 export const cookies = {};
 
@@ -9,8 +10,6 @@ export type Cookies = {
 export const signedCookies = {
     profile: t.Object({
         id: t.Numeric(),
-        name: t.String(),
-        type: t.Union([t.Literal("student"), t.Literal("mentor")]),
     }),
 };
 

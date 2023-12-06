@@ -1,18 +1,18 @@
-import { elysiaBase } from "$/setup.ts";
-import { db, apl as aplTable } from "$db/index.ts";
-import { studentAuthResponse } from "$utils/authHelpers.ts";
+import { elysiaBase, elysiaUserBase } from "$/setup.ts";
+import { db, aplTable } from "$db/index.ts";
+import { userAuthResponse } from "$utils/authHelpers.ts";
 import { baseCookies } from "$utils/cookies.ts";
 import { and, eq } from "drizzle-orm";
 import Elysia, { t } from "elysia";
-import { studentAPLReport } from "./report.ts";
+import { AplReportRoutes } from "./report.ts";
 
-export const studentAPL = new Elysia({ prefix: "/apl" })
-    .use(elysiaBase)
+export const AplRoutes = new Elysia({ prefix: "/apl" })
+    .use(elysiaUserBase)
     .get(
         "/",
         async ({ set, cookie: { profile } }) => {
             const apls = await db.query.apl.findMany({
-                where: eq(aplTable.studentId, profile.value.id),
+                where: eq(aplTable.userId, profile.value.id),
                 columns: {
                     id: true,
                     name: true,
@@ -47,7 +47,10 @@ export const studentAPL = new Elysia({ prefix: "/apl" })
                         }),
                     })
                 ),
-                ...studentAuthResponse,
+                ...userAuthResponse,
+            },
+            detail: {
+                description: "Get all APLs for current user",
             },
         }
     )
@@ -56,10 +59,10 @@ export const studentAPL = new Elysia({ prefix: "/apl" })
             .get(
                 "/",
                 async ({ set, cookie: { profile }, params: { aplId } }) => {
-                    const apl = await db.query.apl.findFirst({
+                    const apl = await db.query.apl.findMany({
                         where: and(
                             eq(aplTable.id, aplId),
-                            eq(aplTable.studentId, profile.value.id)
+                            eq(aplTable.userId, profile.value.id)
                         ),
                         columns: {
                             id: true,
@@ -74,7 +77,8 @@ export const studentAPL = new Elysia({ prefix: "/apl" })
                                 },
                             },
                         },
-                    });
+                        limit: 1,
+                    }).then((apls) => apls.at(0));
 
                     if (!apl) {
                         set.status = 404;
@@ -103,13 +107,16 @@ export const studentAPL = new Elysia({ prefix: "/apl" })
                         404: t.Object({
                             message: t.String(),
                         }),
-                        ...studentAuthResponse,
+                        ...userAuthResponse,
                     },
                     params: t.Object({
                         aplId: t.Integer(),
                     }),
                     cookie: baseCookies,
+                    detail: {
+                        description: "Get an APL",
+                    },
                 }
             )
-            .use(studentAPLReport)
+            .use(AplReportRoutes)
     );

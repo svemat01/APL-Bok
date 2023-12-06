@@ -1,12 +1,12 @@
 import { sqliteTable, integer, text } from "drizzle-orm/sqlite-core";
-import { student } from './student.ts';
+import { user } from './user.ts';
 import { relations, sql } from 'drizzle-orm';
 import { apl } from './apl.ts';
 
 export const report = sqliteTable("report", {
     id: integer("id").primaryKey(),
     aplId: integer("apl_id").notNull().references(() => apl.id),
-    studentId: integer("student_id").notNull().references(() => student.id),
+    userId: integer("user_id").notNull().references(() => user.id),
     rating: integer("rating").notNull(),
     comment: text("comment"),
     date: integer("created_at", {mode: "timestamp"}).notNull().default(sql`CURRENT_TIMESTAMP`),
@@ -15,9 +15,9 @@ export const report = sqliteTable("report", {
 });
 
 export const reportRelations = relations(report, ({ one }) => ({
-    studentId: one(student, {
-        fields: [report.studentId],
-        references: [student.id],
+    userId: one(user, {
+        fields: [report.userId],
+        references: [user.id],
     }),
     aplId: one(apl, {
         fields: [report.aplId],

@@ -1,6 +1,6 @@
 import { relations } from 'drizzle-orm';
 import { sqliteTable, integer, text } from "drizzle-orm/sqlite-core";
-import { studentToGroup } from './student.ts';
+import { userToGroup } from './user.ts';
 
 export const group = sqliteTable("group", {
     id: integer("id").primaryKey(),
@@ -8,5 +8,5 @@ export const group = sqliteTable("group", {
 });
 
 export const groupRelations = relations(group, ({ many }) => ({
-	groupToGroup: many(studentToGroup),
+	groupToGroup: many(userToGroup),
 }));
