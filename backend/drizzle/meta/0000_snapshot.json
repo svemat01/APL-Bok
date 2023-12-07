@@ -1,9 +1,107 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "f1513782-29a7-4917-a3d3-a205d973108b",
+  "id": "e676967e-29a1-469f-83db-6b2cde685e6d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
+    "apl": {
+      "name": "apl",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "company_id": {
+          "name": "company_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "mentor_id": {
+          "name": "mentor_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "start_date": {
+          "name": "start_date",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "end_date": {
+          "name": "end_date",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "apl_user_id_user_id_fk": {
+          "name": "apl_user_id_user_id_fk",
+          "tableFrom": "apl",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "apl_company_id_company_id_fk": {
+          "name": "apl_company_id_company_id_fk",
+          "tableFrom": "apl",
+          "tableTo": "company",
+          "columnsFrom": [
+            "company_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "apl_mentor_id_mentor_id_fk": {
+          "name": "apl_mentor_id_mentor_id_fk",
+          "tableFrom": "apl",
+          "tableTo": "mentor",
+          "columnsFrom": [
+            "mentor_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "company": {
       "name": "company",
       "columns": {
@@ -54,97 +152,6 @@
       },
       "indexes": {},
       "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "internship_location": {
-      "name": "internship_location",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "student_id": {
-          "name": "student_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "company_id": {
-          "name": "company_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "mentor_id": {
-          "name": "mentor_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "start_date": {
-          "name": "start_date",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "end_date": {
-          "name": "end_date",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "internship_location_student_id_student_id_fk": {
-          "name": "internship_location_student_id_student_id_fk",
-          "tableFrom": "internship_location",
-          "tableTo": "student",
-          "columnsFrom": [
-            "student_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "internship_location_company_id_company_id_fk": {
-          "name": "internship_location_company_id_company_id_fk",
-          "tableFrom": "internship_location",
-          "tableTo": "company",
-          "columnsFrom": [
-            "company_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "internship_location_mentor_id_mentor_id_fk": {
-          "name": "internship_location_mentor_id_mentor_id_fk",
-          "tableFrom": "internship_location",
-          "tableTo": "mentor",
-          "columnsFrom": [
-            "mentor_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -206,8 +213,101 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "student": {
-      "name": "student",
+    "report": {
+      "name": "report",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "apl_id": {
+          "name": "apl_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "rating": {
+          "name": "rating",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "comment": {
+          "name": "comment",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "shift_start": {
+          "name": "shift_start",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "shift_end": {
+          "name": "shift_end",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "report_apl_id_apl_id_fk": {
+          "name": "report_apl_id_apl_id_fk",
+          "tableFrom": "report",
+          "tableTo": "apl",
+          "columnsFrom": [
+            "apl_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "report_user_id_user_id_fk": {
+          "name": "report_user_id_user_id_fk",
+          "tableFrom": "report",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "user": {
+      "name": "user",
       "columns": {
         "id": {
           "name": "id",
@@ -229,6 +329,14 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
+        },
+        "permissions": {
+          "name": "permissions",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'0'"
         },
         "first_name": {
           "name": "first_name",
@@ -244,8 +352,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "phone_number": {
-          "name": "phone_number",
+        "phone": {
+          "name": "phone",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
@@ -260,8 +368,8 @@
         }
       },
       "indexes": {
-        "student_username_unique": {
-          "name": "student_username_unique",
+        "user_username_unique": {
+          "name": "user_username_unique",
           "columns": [
             "username"
           ],
@@ -272,11 +380,11 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "student_to_group": {
-      "name": "student_to_group",
+    "user_to_group": {
+      "name": "user_to_group",
       "columns": {
-        "student_id": {
-          "name": "student_id",
+        "user_id": {
+          "name": "user_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
@@ -292,12 +400,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "student_to_group_student_id_student_id_fk": {
-          "name": "student_to_group_student_id_student_id_fk",
-          "tableFrom": "student_to_group",
-          "tableTo": "student",
+        "user_to_group_user_id_user_id_fk": {
+          "name": "user_to_group_user_id_user_id_fk",
+          "tableFrom": "user_to_group",
+          "tableTo": "user",
           "columnsFrom": [
-            "student_id"
+            "user_id"
           ],
           "columnsTo": [
             "id"
@@ -305,9 +413,9 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "student_to_group_group_id_group_id_fk": {
-          "name": "student_to_group_group_id_group_id_fk",
-          "tableFrom": "student_to_group",
+        "user_to_group_group_id_group_id_fk": {
+          "name": "user_to_group_group_id_group_id_fk",
+          "tableFrom": "user_to_group",
           "tableTo": "group",
           "columnsFrom": [
             "group_id"
@@ -319,44 +427,6 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "teacher": {
-      "name": "teacher",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "username": {
-          "name": "username",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "password_hash": {
-          "name": "password_hash",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {
-        "teacher_username_unique": {
-          "name": "teacher_username_unique",
-          "columns": [
-            "username"
-          ],
-          "isUnique": true
-        }
-      },
-      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     }
