@@ -90,4 +90,52 @@ export const AdminCompaniesRoutes = new Elysia({ prefix: "/companies" })
                 companyId: t.Integer(),
             }),
         })
+        .put("/", async ({ user, params, body }) => {
+            requirePermissions(user.permissions, PERMISSION.MANAGE_COMPANIES);
+
+            const { companyId } = params;
+            const { name, location } = body;
+
+            await db.update(companyTable).set({
+                name,
+                location,
+            }).where(eq(companyTable.id, companyId));
+
+            return {
+                message: "Company updated",
+            };
+        }, {
+            response: {
+                200: t.Object({
+                    message: t.String(),
+                }),
+            },
+            params: t.Object({
+                companyId: t.Integer(),
+            }),
+            body: t.Object({
+                name: t.String(),
+                location: t.String(),
+            }),
+        })
+        .delete("/", async ({ user, params }) => {
+            requirePermissions(user.permissions, PERMISSION.MANAGE_COMPANIES);
+
+            const { companyId } = params;
+
+            await db.delete(companyTable).where(eq(companyTable.id, companyId));
+
+            return {
+                message: "Company deleted",
+            };
+        }, {
+            response: {
+                200: t.Object({
+                    message: t.String(),
+                }),
+            },
+            params: t.Object({
+                companyId: t.Integer(),
+            }),
+        })
     )

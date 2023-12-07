@@ -4,7 +4,7 @@ import { PERMISSION, requirePermissions } from "$utils/authHelpers.ts";
 import { eq } from "drizzle-orm";
 import Elysia, { t } from "elysia";
 
-export const AdminUsersReportsRoutes = new Elysia({ prefix: "/reports" })
+export const AdminReportsRoutes = new Elysia({ prefix: "/reports" })
     .use(elysiaUserBase)
     .get(
         "/",

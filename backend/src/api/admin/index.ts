@@ -5,6 +5,8 @@ import { isSetup } from "$utils/setup.ts";
 import { count } from "drizzle-orm";
 import { Elysia, t } from "elysia";
 import { AdminUsersRoutes } from './users.ts';
+import { AdminReportsRoutes } from './reports.ts';
+import { AdminCompaniesRoutes } from './companies.ts';
 
 export const AdminRoutes = new Elysia({ prefix: "/admin" })
     .use(elysiaUserBase)
@@ -86,4 +88,6 @@ export const AdminRoutes = new Elysia({ prefix: "/admin" })
         }
     )
     .use(AdminUsersRoutes)
+    .use(AdminReportsRoutes)
+    .use(AdminCompaniesRoutes)
 

@@ -1,6 +1,10 @@
 import { elysiaUserBase } from "$/setup.ts";
 import { aplTable, db, userTable } from "$db/index.ts";
-import { PERMISSION, canGrantPermissions, requirePermissions } from "$utils/authHelpers.ts";
+import {
+    PERMISSION,
+    canGrantPermissions,
+    requirePermissions,
+} from "$utils/authHelpers.ts";
 import { HttpError } from "$utils/errors.ts";
 import { eq } from "drizzle-orm";
 import Elysia, { t } from "elysia";
@@ -9,7 +13,10 @@ export const AdminUsersRoutes = new Elysia({ prefix: "/users" })
     .use(elysiaUserBase)
     // Get all users
     .get("/", async ({ user }) => {
-        requirePermissions(user.permissions, [PERMISSION.MANAGE_USERS, PERMISSION.VIEW_USERS]);
+        requirePermissions(user.permissions, [
+            PERMISSION.MANAGE_USERS,
+            PERMISSION.VIEW_USERS,
+        ]);
 
         const users = await db.query.user.findMany({
             columns: {
@@ -79,16 +86,80 @@ export const AdminUsersRoutes = new Elysia({ prefix: "/users" })
             },
         }
     )
+    .post(
+        "/bulk",
+        async ({ user, body }) => {
+            requirePermissions(user.permissions, [PERMISSION.MANAGE_USERS]);
+
+            // check if can
+
+            const users = await Promise.all(
+                body.map(async (newUser) => {
+                    const permissions = BigInt(newUser.permissions);
+
+                    const isAllowed = canGrantPermissions(
+                        user.permissions,
+                        permissions
+                    );
+
+                    if (!isAllowed) {
+                        throw new HttpError(
+                            403,
+                            "You cannot grant these permissions"
+                        );
+                    }
+
+                    const hashedPassword = await Bun.password.hash(
+                        newUser.password
+                    );
+
+                    return {
+                        username: newUser.username,
+                        passwordHash: hashedPassword,
+                        firstName: newUser.firstName,
+                        lastName: newUser.lastName,
+                        permissions: permissions.toString(),
+                    };
+                })
+            );
+
+            const result = await db
+                .insert(userTable)
+                .values(users)
+                .then(() => true)
+                .catch(() => false);
+
+            if (!result) {
+                throw new HttpError(401, "Username already exists");
+            }
+
+            return {
+                message: "Users created",
+            };
+        },
+        {
+            body: t.Array(
+                t.Object({
+                    username: t.String(),
+                    password: t.String(),
+                    firstName: t.String(),
+                    lastName: t.String(),
+                    permissions: t.String(),
+                })
+            ),
+            response: {
+                200: t.Object({
+                    message: t.String(),
+                }),
+            },
+        }
+    )
     .group("/:userId", (user) =>
         user
             // Update user permissions
             .put(
                 "/permissions",
-                async ({
-                    user,
-                    params: { userId },
-                    body,
-                }) => {
+                async ({ user, params: { userId }, body }) => {
                     requirePermissions(user.permissions, [
                         PERMISSION.MANAGE_USERS,
                     ]);
@@ -198,84 +269,96 @@ export const AdminUsersRoutes = new Elysia({ prefix: "/users" })
                 }
             )
             // Get all apls for user
-            .get('/apls', async ({ user, params: { userId } }) => {
-                requirePermissions(user.permissions, [PERMISSION.MANAGE_USERS, PERMISSION.VIEW_USERS]);
+            .get(
+                "/apls",
+                async ({ user, params: { userId } }) => {
+                    requirePermissions(user.permissions, [
+                        PERMISSION.MANAGE_USERS,
+                        PERMISSION.VIEW_USERS,
+                    ]);
 
-                const apls = await db.query.apl.findMany({
-                    where: eq(aplTable.userId, userId),
-                    columns: {
-                        id: true,
-                        name: true,
-                        startDate: true,
-                        endDate: true,
-                        companyId: true,
-                        mentorId: true,
-                    },
-                });
+                    const apls = await db.query.apl.findMany({
+                        where: eq(aplTable.userId, userId),
+                        columns: {
+                            id: true,
+                            name: true,
+                            startDate: true,
+                            endDate: true,
+                            companyId: true,
+                            mentorId: true,
+                        },
+                    });
 
-                return apls.map(apl => ({
-                    ...apl,
-                    startDate: apl.startDate.getTime(),
-                    endDate: apl.endDate.getTime(),
-                }));
-            },
-            {
-                response: {
-                    200: t.Array(
-                        t.Object({
-                            id: t.Integer(),
-                            name: t.String(),
-                            startDate: t.Integer(),
-                            endDate: t.Integer(),
-                            companyId: t.Integer(),
-                            mentorId: t.Integer(),
-                        })
-                    ),
+                    return apls.map((apl) => ({
+                        ...apl,
+                        startDate: apl.startDate.getTime(),
+                        endDate: apl.endDate.getTime(),
+                    }));
                 },
-                params: t.Object({
-                    userId: t.Integer(),
-                }),
-            })
+                {
+                    response: {
+                        200: t.Array(
+                            t.Object({
+                                id: t.Integer(),
+                                name: t.String(),
+                                startDate: t.Integer(),
+                                endDate: t.Integer(),
+                                companyId: t.Integer(),
+                                mentorId: t.Integer(),
+                            })
+                        ),
+                    },
+                    params: t.Object({
+                        userId: t.Integer(),
+                    }),
+                }
+            )
             // Get all reports for user
-            .get('/reports', async ({ user, params: { userId } }) => {
-                requirePermissions(user.permissions, [PERMISSION.MANAGE_USERS, PERMISSION.VIEW_USERS]);
+            .get(
+                "/reports",
+                async ({ user, params: { userId } }) => {
+                    requirePermissions(user.permissions, [
+                        PERMISSION.MANAGE_USERS,
+                        PERMISSION.VIEW_USERS,
+                    ]);
 
-                const reports = await db.query.report.findMany({
-                    where: eq(aplTable.userId, userId),
-                    columns: {
-                        id: true,
-                        aplId: true,
-                        comment: true,
-                        date: true,
-                        rating: true,
-                        shiftStart: true,
-                        shiftEnd: true,
-                    },
-                });
+                    const reports = await db.query.report.findMany({
+                        where: eq(aplTable.userId, userId),
+                        columns: {
+                            id: true,
+                            aplId: true,
+                            comment: true,
+                            date: true,
+                            rating: true,
+                            shiftStart: true,
+                            shiftEnd: true,
+                        },
+                    });
 
-                return reports.map(report => ({
-                    ...report,
-                    date: report.date.getTime(),
-                    shiftStart: report.shiftStart.getTime(),
-                    shiftEnd: report.shiftEnd.getTime(),
-                }));
-            },
-            {
-                response: {
-                    200: t.Array(
-                        t.Object({
-                            id: t.Integer(),
-                            aplId: t.Integer(),
-                            comment: t.Nullable(t.String()),
-                            date: t.Integer(),
-                            rating: t.Integer(),
-                            shiftStart: t.Integer(),
-                            shiftEnd: t.Integer(),
-                        })
-                    ),
+                    return reports.map((report) => ({
+                        ...report,
+                        date: report.date.getTime(),
+                        shiftStart: report.shiftStart.getTime(),
+                        shiftEnd: report.shiftEnd.getTime(),
+                    }));
                 },
-                params: t.Object({
-                    userId: t.Integer(),
-                }),
-            })
+                {
+                    response: {
+                        200: t.Array(
+                            t.Object({
+                                id: t.Integer(),
+                                aplId: t.Integer(),
+                                comment: t.Nullable(t.String()),
+                                date: t.Integer(),
+                                rating: t.Integer(),
+                                shiftStart: t.Integer(),
+                                shiftEnd: t.Integer(),
+                            })
+                        ),
+                    },
+                    params: t.Object({
+                        userId: t.Integer(),
+                    }),
+                }
+            )
     );
