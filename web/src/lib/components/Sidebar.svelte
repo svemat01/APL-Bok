@@ -1,13 +1,15 @@
 <script lang="ts">
-  import TiPointOfInterest from "svelte-icons/ti/TiPointOfInterest.svelte";
-  import TiThLarge from "svelte-icons/ti/TiThLarge.svelte";
-  import FaSignOutAlt from 'svelte-icons/fa/FaSignOutAlt.svelte'
+  // import TiPointOfInterest from "svelte-icons/ti/TiPointOfInterest.svelte";
+  // import TiThLarge from "svelte-icons/ti/TiThLarge.svelte";
+  // import FaSignOutAlt from 'svelte-icons/fa/FaSignOutAlt.svelte'
+  import Icon from "@iconify/svelte";
 </script>
 
 <div class="flex flex-col bg-neutral-900 text-neutral-200 p-4 min-w-[15%]">
   <div class="flex flex-col">
     <div class="w-20 h-20 mx-auto">
-      <TiPointOfInterest />
+      <!-- <TiPointOfInterest /> -->
+      <Icon icon="typcn:point-of-interest" class="w-20 h-20 mx-auto" />
     </div>
     <h1 class="text-3xl font-medium text-center">APL-Bok</h1>
   </div>
@@ -20,7 +22,8 @@
         href="/dashboard"
         class="flex items-center px-4 text-xl font-normal hover:bg-neutral-700"
       >
-        <div class="w-8 h-8 mr-5"><TiThLarge /></div>
+        <!-- <div class="w-8 h-8 mr-5"><TiThLarge /></div> -->
+        <Icon icon="fa-solid:th-list" class="w-6 h-6 mr-5" />
         Dashboard
       </a>
     {/each}
@@ -30,7 +33,8 @@
     <!-- <a href="/logout" class="px-4 py-2 hover:bg-neutral-700">Logga ut</a> -->
     <a href="/logout">
         <div class="flex items-center px-4 hover:bg-neutral-700">
-            <div class="w-6 h-6 mr-5"><FaSignOutAlt /></div>
+            <!-- <div class="w-6 h-6 mr-5"><FaSignOutAlt /></div> -->
+            <Icon icon="fa:sign-out" class="w-6 h-6 mr-5" />
             Logga ut
         </div>
     </a>
