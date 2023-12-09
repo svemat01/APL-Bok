@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"name": "APL-Bok",
+			"path": "."
+		},
+		{
+			"name": "backend",
+			"path": "backend"
+		},
+		{
+			"path": "web"
+		}
+	],
+	"settings": {}
+}
