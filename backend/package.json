@@ -1,5 +1,5 @@
 {
-  "name": "backend",
+  "name": "@apl-bok/backend",
   "module": "src/index.ts",
   "type": "module",
   "scripts": {

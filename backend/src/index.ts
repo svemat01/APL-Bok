@@ -58,7 +58,7 @@ const app = new Elysia({
     .use(ApiRoutes)
     .listen(ENV.PORT);
 
-type App = typeof app;
+export type App = typeof app;
 
 console.log(
     `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`

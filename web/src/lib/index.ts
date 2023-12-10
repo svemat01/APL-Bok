@@ -1,1 +1,5 @@
-// place files you want to import through the `$lib` alias in this folder.
+import { edenTreaty } from '@elysiajs/eden'
+import type { App } from '@apl-bok/backend/src'
+
+export const app = edenTreaty<App>("")
+app

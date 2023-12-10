@@ -1,18 +1,19 @@
-import { elysiaUserBase } from "$/setup.ts";
-import { aplTable, db, userTable } from "$db/index.ts";
+import { elysiaUserBase } from '$/setup.ts';
+import { aplTable, db, groupTable, userTable } from '$db/index.ts';
+import { userToGroup } from '$db/schema/user.ts';
 import {
     PERMISSION,
     canGrantPermissions,
     requirePermissions,
-} from "$utils/authHelpers.ts";
-import { HttpError } from "$utils/errors.ts";
-import { eq } from "drizzle-orm";
-import Elysia, { t } from "elysia";
+} from '$utils/authHelpers.ts';
+import { HttpError } from '$utils/errors.ts';
+import { eq } from 'drizzle-orm';
+import Elysia, { t } from 'elysia';
 
-export const AdminUsersRoutes = new Elysia({ prefix: "/users" })
+export const AdminUsersRoutes = new Elysia({ prefix: '/users' })
     .use(elysiaUserBase)
     // Get all users
-    .get("/", async ({ user }) => {
+    .get('/', async ({ user }) => {
         requirePermissions(user.permissions, [
             PERMISSION.MANAGE_USERS,
             PERMISSION.VIEW_USERS,
@@ -32,7 +33,7 @@ export const AdminUsersRoutes = new Elysia({ prefix: "/users" })
     })
     // Create new user
     .post(
-        "/",
+        '/',
         async ({ user, body }) => {
             requirePermissions(user.permissions, [PERMISSION.MANAGE_USERS]);
 
@@ -40,11 +41,11 @@ export const AdminUsersRoutes = new Elysia({ prefix: "/users" })
 
             const isAllowed = canGrantPermissions(
                 user.permissions,
-                permissions
+                permissions,
             );
 
             if (!isAllowed) {
-                throw new HttpError(403, "You cannot grant these permissions");
+                throw new HttpError(403, 'You cannot grant these permissions');
             }
 
             const { username, password, firstName, lastName } = body;
@@ -64,11 +65,11 @@ export const AdminUsersRoutes = new Elysia({ prefix: "/users" })
                 .catch(() => false);
 
             if (!result) {
-                throw new HttpError(401, "Username already exists");
+                throw new HttpError(401, 'Username already exists');
             }
 
             return {
-                message: "User created",
+                message: 'User created',
             };
         },
         {
@@ -84,10 +85,10 @@ export const AdminUsersRoutes = new Elysia({ prefix: "/users" })
                     message: t.String(),
                 }),
             },
-        }
+        },
     )
     .post(
-        "/bulk",
+        '/bulk',
         async ({ user, body }) => {
             requirePermissions(user.permissions, [PERMISSION.MANAGE_USERS]);
 
@@ -99,18 +100,18 @@ export const AdminUsersRoutes = new Elysia({ prefix: "/users" })
 
                     const isAllowed = canGrantPermissions(
                         user.permissions,
-                        permissions
+                        permissions,
                     );
 
                     if (!isAllowed) {
                         throw new HttpError(
                             403,
-                            "You cannot grant these permissions"
+                            'You cannot grant these permissions',
                         );
                     }
 
                     const hashedPassword = await Bun.password.hash(
-                        newUser.password
+                        newUser.password,
                     );
 
                     return {
@@ -120,7 +121,7 @@ export const AdminUsersRoutes = new Elysia({ prefix: "/users" })
                         lastName: newUser.lastName,
                         permissions: permissions.toString(),
                     };
-                })
+                }),
             );
 
             const result = await db
@@ -130,11 +131,11 @@ export const AdminUsersRoutes = new Elysia({ prefix: "/users" })
                 .catch(() => false);
 
             if (!result) {
-                throw new HttpError(401, "Username already exists");
+                throw new HttpError(401, 'Username already exists');
             }
 
             return {
-                message: "Users created",
+                message: 'Users created',
             };
         },
         {
@@ -145,20 +146,20 @@ export const AdminUsersRoutes = new Elysia({ prefix: "/users" })
                     firstName: t.String(),
                     lastName: t.String(),
                     permissions: t.String(),
-                })
+                }),
             ),
             response: {
                 200: t.Object({
                     message: t.String(),
                 }),
             },
-        }
+        },
     )
-    .group("/:userId", (user) =>
+    .group('/:userId', (user) =>
         user
             // Update user permissions
             .put(
-                "/permissions",
+                '/permissions',
                 async ({ user, params: { userId }, body }) => {
                     requirePermissions(user.permissions, [
                         PERMISSION.MANAGE_USERS,
@@ -168,13 +169,13 @@ export const AdminUsersRoutes = new Elysia({ prefix: "/users" })
 
                     const isAllowed = canGrantPermissions(
                         user.permissions,
-                        permissions
+                        permissions,
                     );
 
                     if (!isAllowed) {
                         throw new HttpError(
                             403,
-                            "You cannot grant these permissions"
+                            'You cannot grant these permissions',
                         );
                     }
 
@@ -190,12 +191,12 @@ export const AdminUsersRoutes = new Elysia({ prefix: "/users" })
                     if (!result) {
                         throw new HttpError(
                             400,
-                            "Failed to update permissions"
+                            'Failed to update permissions',
                         );
                     }
 
                     return {
-                        message: "User updated",
+                        message: 'User updated',
                     };
                 },
                 {
@@ -210,11 +211,11 @@ export const AdminUsersRoutes = new Elysia({ prefix: "/users" })
                     params: t.Object({
                         userId: t.Integer(),
                     }),
-                }
+                },
             )
             // Delete user
             .delete(
-                "/",
+                '/',
                 async ({ user, params: { userId } }) => {
                     requirePermissions(user.permissions, [
                         PERMISSION.MANAGE_USERS,
@@ -231,16 +232,16 @@ export const AdminUsersRoutes = new Elysia({ prefix: "/users" })
                         .then((users) => users.at(0));
 
                     if (!targetUser) {
-                        throw new HttpError(400, "User not found");
+                        throw new HttpError(400, 'User not found');
                     }
 
                     const isAllowed = canGrantPermissions(
                         user.permissions,
-                        BigInt(targetUser.permissions)
+                        BigInt(targetUser.permissions),
                     );
 
                     if (!isAllowed) {
-                        throw new HttpError(403, "You cannot delete this user");
+                        throw new HttpError(403, 'You cannot delete this user');
                     }
 
                     const result = await db
@@ -250,11 +251,11 @@ export const AdminUsersRoutes = new Elysia({ prefix: "/users" })
                         .catch(() => false);
 
                     if (!result) {
-                        throw new HttpError(400, "Failed to delete user");
+                        throw new HttpError(400, 'Failed to delete user');
                     }
 
                     return {
-                        message: "User deleted",
+                        message: 'User deleted',
                     };
                 },
                 {
@@ -266,11 +267,11 @@ export const AdminUsersRoutes = new Elysia({ prefix: "/users" })
                     params: t.Object({
                         userId: t.Integer(),
                     }),
-                }
+                },
             )
             // Get all apls for user
             .get(
-                "/apls",
+                '/apls',
                 async ({ user, params: { userId } }) => {
                     requirePermissions(user.permissions, [
                         PERMISSION.MANAGE_USERS,
@@ -305,17 +306,17 @@ export const AdminUsersRoutes = new Elysia({ prefix: "/users" })
                                 endDate: t.Integer(),
                                 companyId: t.Integer(),
                                 mentorId: t.Integer(),
-                            })
+                            }),
                         ),
                     },
                     params: t.Object({
                         userId: t.Integer(),
                     }),
-                }
+                },
             )
             // Get all reports for user
             .get(
-                "/reports",
+                '/reports',
                 async ({ user, params: { userId } }) => {
                     requirePermissions(user.permissions, [
                         PERMISSION.MANAGE_USERS,
@@ -353,12 +354,50 @@ export const AdminUsersRoutes = new Elysia({ prefix: "/users" })
                                 rating: t.Integer(),
                                 shiftStart: t.Integer(),
                                 shiftEnd: t.Integer(),
-                            })
+                            }),
                         ),
                     },
                     params: t.Object({
                         userId: t.Integer(),
                     }),
-                }
+                },
             )
+            // Get all groups for user
+            .get(
+                '/groups',
+                async ({ user, params: { userId } }) => {
+                    requirePermissions(user.permissions, [
+                        PERMISSION.MANAGE_USERS,
+                        PERMISSION.VIEW_USERS,
+                    ]);
+
+                    const groups = await db.query.userToGroup.findMany({
+                        where: eq(userToGroup.userId, userId),
+                        columns:{},
+                        with: {
+                            group: {
+                                columns: {
+                                    id: true,
+                                    name: true,
+                                },
+                            },
+                        },
+                    });
+
+                    return groups.map((group) => group.group);
+                },
+                {
+                    response: {
+                        200: t.Array(
+                            t.Object({
+                                id: t.Integer(),
+                                name: t.String(),
+                            }),
+                        ),
+                    },
+                    params: t.Object({
+                        userId: t.Integer(),
+                    }),
+                },
+            ),
     );

@@ -1,0 +1,8 @@
+{
+  "name": "apl-bok",
+  "type": "module",
+  "workspaces": [
+    "backend",
+    "web"
+  ]
+}
