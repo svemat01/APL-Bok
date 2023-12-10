@@ -1,7 +1,7 @@
-import { elysiaUserBase } from '$/setup.ts';
-import { db, companyTable } from '$db/index.ts';
-import { requirePermissions, PERMISSION } from '$utils/authHelpers.ts';
-import { HttpError } from '$utils/errors.ts';
+import { elysiaUserBase } from '../../setup.ts';
+import { db, companyTable } from '../../db/index.ts';
+import { requirePermissions, PERMISSION } from '../../utils/authHelpers.ts';
+import { HttpError } from '../../utils/errors.ts';
 import { eq } from 'drizzle-orm';
 import Elysia, { t } from 'elysia';
 

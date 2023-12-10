@@ -1,9 +1,9 @@
-import { db, userTable } from "$db/index.ts";
-import { PERMISSION, userAuthResponse } from "$utils/authHelpers.ts";
-import { baseCookies, signedCookies } from "$utils/cookies.ts";
-import { ENV } from "$utils/environment.ts";
-import { HttpError } from "$utils/errors.ts";
-import { ip } from "$utils/ipPlugin.ts";
+import { db, userTable } from "./db/index.ts";
+import { PERMISSION, userAuthResponse } from "./utils/authHelpers.ts";
+import { baseCookies, signedCookies } from "./utils/cookies.ts";
+import { ENV } from "./utils/environment.ts";
+import { HttpError } from "./utils/errors.ts";
+import { ip } from "./utils/ipPlugin.ts";
 import swagger from "@elysiajs/swagger";
 import { eq } from "drizzle-orm";
 import Elysia, { t } from "elysia";

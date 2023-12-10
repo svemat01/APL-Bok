@@ -1,5 +1,5 @@
-import { SignedCookies, signedCookies } from "$utils/cookies.ts";
-import { db } from "$db/index.ts";
+import { SignedCookies, signedCookies } from "../utils/cookies.ts";
+import { db } from "../db/index.ts";
 import { Handler, Static, t } from "elysia";
 import { TObject } from "@sinclair/typebox";
 

@@ -1,14 +1,14 @@
-import { ApiRoutes } from "$api/index.ts";
-import { db, userTable } from "$db/index.ts";
+import { ApiRoutes } from "./api/index.ts";
+import { db, userTable } from "./db/index.ts";
 import Elysia from "elysia";
 import { elysiaBase } from "./setup.ts";
-import { ENV } from "$utils/environment.ts";
+import { ENV } from "./utils/environment.ts";
 import swagger from "@elysiajs/swagger";
-import { signedCookies } from "$utils/cookies.ts";
-import { ip } from "$utils/ipPlugin.ts";
-import { isSetup } from "$utils/setup.ts";
-import { canGrantPermissions } from "$utils/authHelpers.ts";
-import { HttpError } from '$utils/errors.ts';
+import { signedCookies } from "./utils/cookies.ts";
+import { ip } from "./utils/ipPlugin.ts";
+import { isSetup } from "./utils/setup.ts";
+import { canGrantPermissions } from "./utils/authHelpers.ts";
+import { HttpError } from './utils/errors.ts';
 
 // Generate random password
 export const setupPassword = crypto.randomUUID();

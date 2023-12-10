@@ -1,7 +1,7 @@
-import { elysiaBase, elysiaUserBase } from "$/setup.ts";
-import { db, aplTable } from "$db/index.ts";
-import { userAuthResponse } from "$utils/authHelpers.ts";
-import { baseCookies } from "$utils/cookies.ts";
+import { elysiaBase, elysiaUserBase } from "../../setup.ts";
+import { db, aplTable } from "../../db/index.ts";
+import { userAuthResponse } from "../../utils/authHelpers.ts";
+import { baseCookies } from "../../utils/cookies.ts";
 import { and, eq } from "drizzle-orm";
 import Elysia, { t } from "elysia";
 import { AplReportRoutes } from "./report.ts";

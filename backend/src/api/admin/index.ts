@@ -1,7 +1,7 @@
-import { setupPassword } from "$/index.ts";
-import { elysiaUserBase } from "$/setup.ts";
-import { db, userTable } from "$db/index.ts";
-import { isSetup } from "$utils/setup.ts";
+import { setupPassword } from "../../index.ts";
+import { elysiaUserBase } from "../..//setup.ts";
+import { db, userTable } from "../../db/index.ts";
+import { isSetup } from "../../utils/setup.ts";
 import { count } from "drizzle-orm";
 import { Elysia, t } from "elysia";
 import { AdminUsersRoutes } from './users.ts';

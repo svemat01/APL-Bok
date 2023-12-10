@@ -1,12 +1,12 @@
-import { elysiaUserBase } from '$/setup.ts';
-import { aplTable, db, groupTable, userTable } from '$db/index.ts';
-import { userToGroup } from '$db/schema/user.ts';
+import { elysiaUserBase } from '../../setup.ts';
+import { aplTable, db, groupTable, userTable } from '../../db/index.ts';
+import { userToGroup } from '../../db/schema/user.ts';
 import {
     PERMISSION,
     canGrantPermissions,
     requirePermissions,
-} from '$utils/authHelpers.ts';
-import { HttpError } from '$utils/errors.ts';
+} from '../../utils/authHelpers.ts';
+import { HttpError } from '../../utils/errors.ts';
 import { eq } from 'drizzle-orm';
 import Elysia, { t } from 'elysia';
 

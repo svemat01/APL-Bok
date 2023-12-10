@@ -1,4 +1,4 @@
-import { db, userTable } from '$db/index.ts';
+import { db, userTable } from '../db/index.ts';
 import { count } from 'drizzle-orm';
 
 export const isSetup = async () => {
