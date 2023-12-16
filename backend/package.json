@@ -1,5 +1,6 @@
 {
   "name": "@apl-bok/backend",
+  "version": "0.0.1",
   "module": "src/index.ts",
   "type": "module",
   "scripts": {
@@ -9,6 +10,7 @@
     "db:studio": "drizzle-kit studio"
   },
   "devDependencies": {
+    "@elysiajs/cors": "^0.7.2",
     "bun-types": "latest",
     "drizzle-kit": "^0.20.6"
   },
@@ -18,9 +20,11 @@
   "dependencies": {
     "@elysiajs/swagger": "^0.7.4",
     "@sinclair/typebox": "^0.31.28",
-    "drizzle-orm": "latest",
-    "elysia": "^0.7.29",
+    "cache-fns": "^0.0.3",
+    "drizzle-orm": "^0.29.1",
+    "elysia": "^0.7.30",
     "envalid": "^8.0.0",
+    "node-cache": "^5.1.2",
     "permissio": "^2.0.2"
   }
 }

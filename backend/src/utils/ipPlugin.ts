@@ -33,7 +33,7 @@ export const ip = (config: {
     checkHeaders?: IPHeaders[]
 } = {}) => (app: Elysia) => {
     return app.derive(({ request }) => {
-        console.log("server", app.server)
+        // console.log("server", app.server)
         if (globalThis.Bun) return {
             ip: app.server!.requestIP(request)
         } 

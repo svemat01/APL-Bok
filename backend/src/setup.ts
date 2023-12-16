@@ -13,13 +13,15 @@ export const elysiaBase = new Elysia({
     cookie: {
         sign: Object.keys(signedCookies),
         secrets: ENV.COOKIE_SECRET,
+        maxAge: 1000 * 60 * 60 * 24 * 30,
+        
     },
 })
 
 export const elysiaUserBase = new Elysia()
     .use(elysiaBase)
     .derive(async ({ cookie: { profile } }) => {
-        console.log("profile", profile.value);
+        // console.log("profile", profile.value);
         if (!profile.value) {
             return;
         }

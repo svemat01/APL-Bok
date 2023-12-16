@@ -86,10 +86,10 @@ export const userAuthResponse = {
     ),
     403: t.Object(
         {
-            message: t.Literal("Not a user"),
+            message: t.String(),
         },
         {
-            description: "Not a user",
+            description: "Missing permission",
         }
     ),
 };

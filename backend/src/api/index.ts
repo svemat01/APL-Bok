@@ -6,6 +6,8 @@ import { eq } from "drizzle-orm";
 import { PERMISSION, listPermissions, userAuthResponse } from "../utils/authHelpers.ts";
 import { AplRoutes } from "./apl/index.ts";
 import { AdminRoutes } from './admin/index.ts';
+import { setupPassword } from '../index.ts';
+import { isSetup } from '../utils/dbHelpers.ts';
 
 export const ApiRoutes = new Elysia({
     prefix: "/api",
@@ -61,6 +63,14 @@ export const ApiRoutes = new Elysia({
                 id: user.id,
             };
 
+            // profile.set({
+            //     maxAge: 60 * 60 * 24 * 7,
+            // })
+            // profile.add({
+            //     maxAge: 60 * 60 * 24 * 7,
+            //     domain: "localhost:5173",
+            // })
+
             set.status = 200;
             return {
                 message: "Signed in",
@@ -95,10 +105,116 @@ export const ApiRoutes = new Elysia({
             },
         }
     )
+    // System Setup
+    .get(
+        '/setup',
+        async ({cookie: {profile}}) => {
+            if (await isSetup()) {
+                return {
+                    message: 'Setup not required',
+                    isSetup: true,
+                    loggedIn: !!profile.value,
+                };
+            } else {
+                return {
+                    message: 'Setup required',
+                    isSetup: false,
+                    loggedIn: !!profile.value,
+                };
+            }
+        },
+        {
+            cookie: baseCookies,
+            response: {
+                200: t.Object({
+                    message: t.String(),
+                    isSetup: t.Boolean(),
+                    loggedIn: t.Boolean(),
+                }),
+            },
+        },
+    )
+    .post(
+        '/setup',
+        async ({ set, body, cookie: { profile } }) => {
+            if (await isSetup()) {
+                set.status = 412;
+
+                return {
+                    message: 'Setup already complete',
+                };
+            }
+
+            if (body.setupPassword !== setupPassword) {
+                set.status = 400;
+
+                return {
+                    message: 'Invalid setup password',
+                };
+            }
+
+            const { username, password, firstName, lastName } = body;
+
+            const passwordHash = await Bun.password.hash(password);
+
+            const id = await db.insert(userTable).values({
+                username,
+                passwordHash,
+                firstName,
+                lastName,
+                permissions: '1',
+            }).returning({id: userTable.id}).then(users => users.at(0)?.id);
+
+            if (!id) {
+                set.status = 500;
+
+                return {
+                    message: 'Internal server error',
+                };
+            }
+
+            profile.value = {
+                id,
+            };
+
+            return {
+                message: 'Setup complete',
+            };
+        },
+        {
+            cookie: baseCookies,
+            body: t.Object({
+                username: t.String(),
+                password: t.String(),
+                firstName: t.String(),
+                lastName: t.String(),
+                setupPassword: t.String(),
+            }),
+            response: {
+                200: t.Object({
+                    message: t.String(),
+                }),
+                400: t.Object({
+                    message: t.Literal('Invalid setup password'),
+                }),
+                412: t.Object({
+                    message: t.Literal('Setup already complete'),
+                }),
+            },
+        },
+    )
     .guard({
         beforeHandle: [
-            ({ set, cookie: { profile } }) => {
-                console.log("profile", profile.value);
+            async ({ set, cookie: { profile } }) => {
+                // console.log("profile", profile.value);
+                if (!await isSetup()) {
+                    set.status = 412;
+
+                    return {
+                        message: 'Setup not complete',
+                    };
+                }
+
                 if (!profile.value) {
                     set.status = 401;
                     return {
@@ -108,7 +224,17 @@ export const ApiRoutes = new Elysia({
             },
         ],
         cookie: baseCookies,
-        response: userAuthResponse,
+        response: {
+            ...userAuthResponse,
+            412: t.Object(
+                {
+                    message: t.Literal("Setup not complete"),
+                },
+                {
+                    description: "Setup not complete",
+                }
+            ),
+        },
     })
     .use(elysiaUserBase)
     .post(
@@ -121,7 +247,12 @@ export const ApiRoutes = new Elysia({
                 };
             }
 
-            profile.remove();
+            profile.remove({
+                domain: profile.domain,
+                path: profile.path ?? "/",
+                sameSite: profile.sameSite,
+                secure: profile.secure,
+            });
 
             set.status = 200;
             return {

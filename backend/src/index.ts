@@ -6,12 +6,25 @@ import { ENV } from "./utils/environment.ts";
 import swagger from "@elysiajs/swagger";
 import { signedCookies } from "./utils/cookies.ts";
 import { ip } from "./utils/ipPlugin.ts";
-import { isSetup } from "./utils/setup.ts";
 import { canGrantPermissions } from "./utils/authHelpers.ts";
 import { HttpError } from './utils/errors.ts';
+import { cors } from '@elysiajs/cors'
+import { randomInt } from "crypto";
+import { isSetup } from './utils/dbHelpers.ts';
 
 // Generate random password
-export const setupPassword = crypto.randomUUID();
+export const setupPassword = generateSetupPassword();
+
+function generateSetupPassword(): string {
+    const words = ["happy", "sunny", "brave", "clever", "kind", "cat", "dog", "bird", "tree", "flower"];
+    const randomWords = [];
+    for (let i = 0; i < 3; i++) {
+        const randomIndex = randomInt(words.length);
+        randomWords.push(words[randomIndex]);
+    }
+    const randomNumber = randomInt(1000, 9999);
+    return `${randomWords.join("-")}-${randomNumber}`;
+}
 
 const app = new Elysia({
     cookie: {
@@ -19,6 +32,10 @@ const app = new Elysia({
         secrets: ENV.COOKIE_SECRET,
     },
 })
+    .use(cors({
+        credentials: true,
+        allowedHeaders: ['Content-Type', 'Authorization'],
+    }))
     .use(ip())
     .use(elysiaBase)
     .error('HttpError', HttpError)
@@ -66,16 +83,16 @@ console.log(
 );
 
 if (!(await isSetup())) {
-    await db
-        .insert(userTable)
-        .values({
-            username: "jakob",
-            passwordHash: await Bun.password.hash("1234"),
-            firstName: "Jakob",
-            lastName: "G2",
-            permissions: "0",
-        })
-        .execute();
+    // await db
+    //     .insert(userTable)
+    //     .values({
+    //         username: "jakob",
+    //         passwordHash: await Bun.password.hash("1234"),
+    //         firstName: "Jakob",
+    //         lastName: "G2",
+    //         permissions: "0",
+    //     })
+    //     .execute();
 
     console.log(
         "APL Bok is not setup. Please go to the setup page to set up the application."

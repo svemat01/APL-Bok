@@ -5,7 +5,7 @@ import { schema, tables } from "./schema";
 import { eq, sql } from 'drizzle-orm';
 
 const sqlite = new Database("sqlite.db");
-export const db = drizzle(sqlite, { schema, logger: true });
+export const db = drizzle(sqlite, { schema, logger: false });
 
 migrate(db, {
     migrationsFolder: "drizzle",

@@ -1,3 +1,4 @@
+import { userAuthResponse } from './../../utils/authHelpers.ts';
 import { elysiaUserBase } from '../../setup.ts';
 import { aplTable, db, groupTable, userTable } from '../../db/index.ts';
 import { userToGroup } from '../../db/schema/user.ts';
@@ -7,7 +8,7 @@ import {
     requirePermissions,
 } from '../../utils/authHelpers.ts';
 import { HttpError } from '../../utils/errors.ts';
-import { eq } from 'drizzle-orm';
+import { count, eq, sql } from 'drizzle-orm';
 import Elysia, { t } from 'elysia';
 
 export const AdminUsersRoutes = new Elysia({ prefix: '/users' })
@@ -30,6 +31,37 @@ export const AdminUsersRoutes = new Elysia({ prefix: '/users' })
         });
 
         return users;
+    }, {
+        response: {
+            ...userAuthResponse,
+            200: t.Array(
+                t.Object({
+                    id: t.Integer(),
+                    username: t.String(),
+                    firstName: t.String(),
+                    lastName: t.String(),
+                    permissions: t.String(),
+                }),
+            ),
+        },
+    })
+    // Get amount of users
+    .get('/count', async ({ user }) => {
+        requirePermissions(user.permissions, [
+            PERMISSION.MANAGE_USERS,
+            PERMISSION.VIEW_USERS,
+        ]);
+
+        const _count = await db
+            .select({
+                value: count(userTable.id),
+            })
+            .from(userTable)
+            .then((res) => res.at(0)?.value);
+
+        return {
+            count: _count,
+        };
     })
     // Create new user
     .post(
@@ -373,7 +405,7 @@ export const AdminUsersRoutes = new Elysia({ prefix: '/users' })
 
                     const groups = await db.query.userToGroup.findMany({
                         where: eq(userToGroup.userId, userId),
-                        columns:{},
+                        columns: {},
                         with: {
                             group: {
                                 columns: {
