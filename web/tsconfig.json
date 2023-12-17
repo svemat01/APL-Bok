@@ -26,6 +26,9 @@
 		"./tests/**/*.js",
 		"./tests/**/*.ts",
 		"./tests/**/*.svelte",
+
+		// Config files
 		"./.eslintrc.cjs",
+		"./svelte.config.js",
 	],
 }

@@ -1,6 +1,6 @@
 <script lang="ts">
     export let title: string;
-    export let value: string;
+    export let value: string | number;
 
     let clazz = '';
     export { clazz as class };
