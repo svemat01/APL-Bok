@@ -140,7 +140,7 @@ export const AdminReportsRoutes = new Elysia({ prefix: "/reports" })
                         }),
                     },
                     params: t.Object({
-                        reportId: t.Integer(),
+                        reportId: t.Numeric(),
                     }),
                 }
             )
@@ -170,7 +170,7 @@ export const AdminReportsRoutes = new Elysia({ prefix: "/reports" })
                         }),
                     },
                     params: t.Object({
-                        reportId: t.Integer(),
+                        reportId: t.Numeric(),
                     }),
                 }
             )

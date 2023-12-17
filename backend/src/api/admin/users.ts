@@ -93,15 +93,16 @@ export const AdminUsersRoutes = new Elysia({ prefix: '/users' })
                     lastName,
                     permissions: permissions.toString(),
                 })
-                .then(() => true)
-                .catch(() => false);
+                .returning({ id: userTable.id})
+                .then((users) => users.at(0)?.id)
+                .catch(() => undefined);
 
             if (!result) {
-                throw new HttpError(401, 'Username already exists');
+                throw new HttpError(409, 'Username already exists');
             }
 
             return {
-                message: 'User created',
+                id: result,
             };
         },
         {
@@ -114,6 +115,9 @@ export const AdminUsersRoutes = new Elysia({ prefix: '/users' })
             }),
             response: {
                 200: t.Object({
+                    id: t.Integer(),
+                }),
+                409: t.Object({
                     message: t.String(),
                 }),
             },
@@ -189,6 +193,49 @@ export const AdminUsersRoutes = new Elysia({ prefix: '/users' })
     )
     .group('/:userId', (user) =>
         user
+            // Get user
+            .get('/', async ({ user, params: { userId } }) => {
+                requirePermissions(user.permissions, [
+                    PERMISSION.MANAGE_USERS,
+                    PERMISSION.VIEW_USERS,
+                ]);
+
+                console.log(userId);
+
+                const targetUser = await db.query.user
+                    .findMany({
+                        where: eq(userTable.id, userId),
+                        columns: {
+                            id: true,
+                            username: true,
+                            firstName: true,
+                            lastName: true,
+                            permissions: true,
+                        },
+                        limit: 1,
+                    })
+                    .then((users) => users.at(0));
+
+                if (!targetUser) {
+                    throw new HttpError(400, 'User not found');
+                }
+
+                return targetUser;
+            }, {
+                response: {
+                    ...userAuthResponse,
+                    200: t.Object({
+                        id: t.Integer(),
+                        username: t.String(),
+                        firstName: t.String(),
+                        lastName: t.String(),
+                        permissions: t.String(),
+                    }),
+                },
+                params: t.Object({
+                    userId: t.Numeric(),
+                }),
+            })
             // Update user permissions
             .put(
                 '/permissions',
@@ -241,7 +288,7 @@ export const AdminUsersRoutes = new Elysia({ prefix: '/users' })
                         }),
                     },
                     params: t.Object({
-                        userId: t.Integer(),
+                        userId: t.Numeric(),
                     }),
                 },
             )
@@ -297,7 +344,7 @@ export const AdminUsersRoutes = new Elysia({ prefix: '/users' })
                         }),
                     },
                     params: t.Object({
-                        userId: t.Integer(),
+                        userId: t.Numeric(),
                     }),
                 },
             )
@@ -342,7 +389,7 @@ export const AdminUsersRoutes = new Elysia({ prefix: '/users' })
                         ),
                     },
                     params: t.Object({
-                        userId: t.Integer(),
+                        userId: t.Numeric(),
                     }),
                 },
             )
@@ -390,7 +437,7 @@ export const AdminUsersRoutes = new Elysia({ prefix: '/users' })
                         ),
                     },
                     params: t.Object({
-                        userId: t.Integer(),
+                        userId: t.Numeric(),
                     }),
                 },
             )
@@ -428,7 +475,7 @@ export const AdminUsersRoutes = new Elysia({ prefix: '/users' })
                         ),
                     },
                     params: t.Object({
-                        userId: t.Integer(),
+                        userId: t.Numeric(),
                     }),
                 },
             ),

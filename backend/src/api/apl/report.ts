@@ -9,7 +9,7 @@ export const AplReportRoutes = new Elysia({ prefix: "/report" })
     .use(elysiaUserBase)
     .guard({
         params: t.Object({
-            aplId: t.Integer(),
+            aplId: t.Numeric(),
         }),
     })
     .get(
@@ -124,7 +124,7 @@ export const AplReportRoutes = new Elysia({ prefix: "/report" })
                 ...userAuthResponse,
             },
             params: t.Object({
-                aplId: t.Integer(),
+                aplId: t.Numeric(),
             }),
             body: t.Object({
                 rating: t.Integer({
@@ -196,7 +196,7 @@ export const AplReportRoutes = new Elysia({ prefix: "/report" })
                         ...userAuthResponse,
                     },
                     params: t.Object({
-                        aplId: t.Integer(),
+                        aplId: t.Numeric(),
                     }),
                     cookie: baseCookies,
                 }
@@ -242,7 +242,7 @@ export const AplReportRoutes = new Elysia({ prefix: "/report" })
                         ...userAuthResponse,
                     },
                     params: t.Object({
-                        aplId: t.Integer(),
+                        aplId: t.Numeric(),
                     }),
                     cookie: baseCookies,
                 }

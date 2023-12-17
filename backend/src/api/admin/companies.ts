@@ -87,7 +87,7 @@ export const AdminCompaniesRoutes = new Elysia({ prefix: "/companies" })
                 }),
             },
             params: t.Object({
-                companyId: t.Integer(),
+                companyId: t.Numeric(),
             }),
         })
         .put("/", async ({ user, params, body }) => {
@@ -111,7 +111,7 @@ export const AdminCompaniesRoutes = new Elysia({ prefix: "/companies" })
                 }),
             },
             params: t.Object({
-                companyId: t.Integer(),
+                companyId: t.Numeric(),
             }),
             body: t.Object({
                 name: t.String(),
@@ -135,7 +135,7 @@ export const AdminCompaniesRoutes = new Elysia({ prefix: "/companies" })
                 }),
             },
             params: t.Object({
-                companyId: t.Integer(),
+                companyId: t.Numeric(),
             }),
         })
     )

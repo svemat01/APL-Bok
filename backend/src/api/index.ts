@@ -8,6 +8,7 @@ import { AplRoutes } from "./apl/index.ts";
 import { AdminRoutes } from './admin/index.ts';
 import { setupPassword } from '../index.ts';
 import { isSetup } from '../utils/dbHelpers.ts';
+import { faker } from '@faker-js/faker';
 
 export const ApiRoutes = new Elysia({
     prefix: "/api",
@@ -373,5 +374,28 @@ export const ApiRoutes = new Elysia({
             cookie: baseCookies,
         }
     )
+    .post('/fake-fill', async ({ body }) => {
+        const passwordHash = await Bun.password.hash('password');
+        for (let i = 0; i < body.count; i++) {
+            const firstName = faker.person.firstName();
+            const lastName = faker.person.lastName();
+
+            await db.insert(userTable).values({
+                username: faker.internet.userName({
+                    firstName,
+                    lastName,
+                }).toLowerCase(),
+                passwordHash,
+                firstName,
+                lastName,
+                permissions: '0',
+            });
+        }
+
+    }, {
+        body: t.Object({
+            count: t.Number(),
+        }),
+    })
     .use(AplRoutes)
     .use(AdminRoutes)

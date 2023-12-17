@@ -100,6 +100,4 @@ if (!(await isSetup())) {
     console.log(`🚧 Setup password: ${setupPassword}`);
 }
 
-db.select().from(userTable).execute().then(console.log);
-
 console.log("🚀 APL Bok is running!");

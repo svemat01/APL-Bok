@@ -110,7 +110,7 @@ export const AplRoutes = new Elysia({ prefix: "/apl" })
                         ...userAuthResponse,
                     },
                     params: t.Object({
-                        aplId: t.Integer(),
+                        aplId: t.Numeric(),
                     }),
                     cookie: baseCookies,
                     detail: {
