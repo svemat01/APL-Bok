@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "e676967e-29a1-469f-83db-6b2cde685e6d",
+  "id": "800f20d4-6df4-4e98-bd59-296c0da06b8c",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "apl": {
@@ -39,7 +39,7 @@
           "name": "mentor_id",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         },
         "start_date": {

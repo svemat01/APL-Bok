@@ -50,6 +50,8 @@ const app = new Elysia({
             }
         }
 
+        console.error(error);
+
         return error;
     })
     .use(

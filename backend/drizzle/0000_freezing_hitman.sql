@@ -3,7 +3,7 @@ CREATE TABLE `apl` (
 	`name` text NOT NULL,
 	`user_id` integer NOT NULL,
 	`company_id` integer NOT NULL,
-	`mentor_id` integer NOT NULL,
+	`mentor_id` integer,
 	`start_date` integer NOT NULL,
 	`end_date` integer NOT NULL,
 	FOREIGN KEY (`user_id`) REFERENCES `user`(`id`) ON UPDATE no action ON DELETE no action,

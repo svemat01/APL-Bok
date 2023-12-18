@@ -1,31 +1,11 @@
 <script lang="ts">
     import type { PageData } from './$types';
 
-    import TBodyCell from '$lib/components/Table/TBodyCell.svelte';
-    import TBodyRow from '$lib/components/Table/TBodyRow.svelte';
-    import THead from '$lib/components/Table/THead.svelte';
-    import THeadRow from '$lib/components/Table/THeadRow.svelte';
-    import THeaderCell from '$lib/components/Table/THeaderCell.svelte';
-    import Table from '$lib/components/Table/Table.svelte';
+    import * as Table from '$lib/components/ui/table';
 
     export let data: PageData;
 
     const { company } = data;
-    // {
-    //     id: number;
-    //     location: string;
-    //     name: string;
-    //     apl: {
-    //         id: number;
-    //         name: string;
-    //         startDate: string;
-    //         endDate: string;
-    //     }[];
-    //     mentor: {
-    //         id: number;
-    //         name: string;
-    //     }[];
-    // }
 </script>
 
 <div class="p-2 space-y-3">
@@ -36,22 +16,25 @@
         {#if company.apl.length === 0}
             <p>No APLs</p>
         {:else}
-            <Table>
-                <THead>
-                    <THeadRow>
-                        <THeaderCell>Name</THeaderCell>
-                        <THeaderCell>Start Date</THeaderCell>
-                        <THeaderCell>End Date</THeaderCell>
-                    </THeadRow>
-                </THead>
-                {#each company.apl as apl}
-                    <TBodyRow>
-                        <TBodyCell>{apl.name}</TBodyCell>
-                        <TBodyCell>{apl.startDate}</TBodyCell>
-                        <TBodyCell>{apl.endDate}</TBodyCell>
-                    </TBodyRow>
-                {/each}
-            </Table>
+            <Table.Root>
+                <Table.Caption>List of APLs</Table.Caption>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.Header>Name</Table.Header>
+                        <Table.Header>Start Date</Table.Header>
+                        <Table.Header>End Date</Table.Header>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                    {#each company.apl as apl}
+                        <Table.Row>
+                            <Table.Cell>{apl.name}</Table.Cell>
+                            <Table.Cell>{apl.startDate}</Table.Cell>
+                            <Table.Cell>{apl.endDate}</Table.Cell>
+                        </Table.Row>
+                    {/each}
+                </Table.Body>
+            </Table.Root>
         {/if}
     </div>
 
@@ -60,24 +43,21 @@
         {#if company.mentor.length === 0}
             <p>No Mentors</p>
         {:else}
-            <Table>
-                <THead>
-                    <THeadRow>
-                        <THeaderCell>Name</THeaderCell>
-                    </THeadRow>
-                </THead>
-                {#each company.mentor as mentor}
-                    <TBodyRow>
-                        <TBodyCell>{mentor.name}</TBodyCell>
-                    </TBodyRow>
-                {/each}
-            </Table>
+            <Table.Root>
+                <Table.Caption>List of Mentors</Table.Caption>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.Header>Name</Table.Header>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                    {#each company.mentor as mentor}
+                        <Table.Row>
+                            <Table.Cell>{mentor.name}</Table.Cell>
+                        </Table.Row>
+                    {/each}
+                </Table.Body>
+            </Table.Root>
         {/if}
     </div>
 </div>
-
-<style lang="postcss">
-    details[open] summary span {
-        transform: rotate(180deg);
-    }
-</style>

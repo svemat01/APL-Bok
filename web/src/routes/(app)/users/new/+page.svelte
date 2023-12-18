@@ -1,15 +1,18 @@
 <script lang="ts">
-    import { superForm, setMessage } from 'sveltekit-superforms/client';
+    import type { FormOptions } from 'formsnap';
+    import { setMessage } from 'sveltekit-superforms/client';
 
     import type { PageData } from './$types.js';
     import { _newUserSchema } from './+page.js';
 
     import { goto } from '$app/navigation';
     import { fetchApi } from '$lib';
+    import * as Form from '$lib/components/ui/form';
 
     export let data: PageData;
 
-    const { form, errors, message, constraints, enhance } = superForm(data.form, {
+    // const { form, errors, message, constraints, enhance } = superForm(data.form, );
+    const options: FormOptions<typeof _newUserSchema> = {
         SPA: true,
         validators: _newUserSchema,
         onUpdate: async ({ form }) => {
@@ -35,49 +38,43 @@
                 }
             }
         },
-    });
+    };
 </script>
 
 <div class="p-2 space-y-4">
-    {#if $message}<h3>{$message}</h3>{/if}
-    <form
-        class="flex flex-col items-center justify-center w-full max-w-md space-y-4"
-        method="POST"
-        use:enhance
-    >
-        <!-- <TextInput
-            label="Username"
-            bind:value={$form.username}
-            errors={$errors.username}
-            constraints={$constraints.username}
-            aria-invalid={$errors.username ? 'true' : undefined}
-        />
+    <Form.Root {options} form={data.form} schema={_newUserSchema} let:config>
+        <Form.Field {config} name="username">
+            <Form.Item>
+                <Form.Label>Username</Form.Label>
+                <Form.Input />
+                <Form.Validation />
+            </Form.Item>
+        </Form.Field>
 
-        <TextInput
-            label="First Name"
-            bind:value={$form.firstName}
-            errors={$errors.firstName}
-            constraints={$constraints.firstName}
-            aria-invalid={$errors.firstName ? 'true' : undefined}
-        />
+        <Form.Field {config} name="firstName">
+            <Form.Item>
+                <Form.Label>First Name</Form.Label>
+                <Form.Input />
+                <Form.Validation />
+            </Form.Item>
+        </Form.Field>
 
-        <TextInput
-            label="Last Name"
-            bind:value={$form.lastName}
-            errors={$errors.lastName}
-            constraints={$constraints.lastName}
-            aria-invalid={$errors.lastName ? 'true' : undefined}
-        />
+        <Form.Field {config} name="lastName">
+            <Form.Item>
+                <Form.Label>Last Name</Form.Label>
+                <Form.Input />
+                <Form.Validation />
+            </Form.Item>
+        </Form.Field>
 
-        <TextInput
-            label="Password"
-            type="text"
-            bind:value={$form.password}
-            errors={$errors.password}
-            constraints={$constraints.password}
-            aria-invalid={$errors.password ? 'true' : undefined}
-        />
+        <Form.Field {config} name="password">
+            <Form.Item>
+                <Form.Label>Password</Form.Label>
+                <Form.Input type="password" />
+                <Form.Validation />
+            </Form.Item>
+        </Form.Field>
 
-        <Button text="Create Account" type="submit" /> -->
-    </form>
+        <Form.Button>Create User</Form.Button>
+    </Form.Root>
 </div>

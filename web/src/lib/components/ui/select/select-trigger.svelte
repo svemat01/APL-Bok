@@ -5,6 +5,7 @@
     import { cn } from '$lib/utils';
 
     type $$Props = SelectPrimitive.TriggerProps;
+    // eslint-disable-next-line unused-imports/no-unused-vars
     type $$Events = SelectPrimitive.TriggerEvents;
 
     let className: $$Props['class'] = undefined;
@@ -23,6 +24,6 @@
 >
     <slot {builder} />
     <div>
-        <ChevronDown class="h-4 w-4 opacity-50" />
+        <ChevronDown class="w-4 h-4 opacity-50" />
     </div>
 </SelectPrimitive.Trigger>

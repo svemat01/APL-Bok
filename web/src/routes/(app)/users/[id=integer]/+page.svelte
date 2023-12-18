@@ -38,7 +38,6 @@
                 <Table.Header>
                     <Table.Row>
                         <Table.Header>Name</Table.Header>
-                        <Table.Header>ID</Table.Header>
                         <Table.Header>Start Date</Table.Header>
                         <Table.Header>End Date</Table.Header>
                     </Table.Row>
@@ -47,7 +46,6 @@
                     {#each user.apl as apl}
                         <Table.Row>
                             <Table.Cell>{apl.name}</Table.Cell>
-                            <Table.Cell>{apl.id}</Table.Cell>
                             <Table.Cell>{apl.startDate}</Table.Cell>
                             <Table.Cell>{apl.endDate}</Table.Cell>
                         </Table.Row>

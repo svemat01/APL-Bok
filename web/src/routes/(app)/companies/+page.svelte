@@ -3,8 +3,9 @@
     import CompaniesTable from './CompaniesTable.svelte';
 
     import { page } from '$app/stores';
-    import LinkButton from '$lib/components/LinkButton.svelte';
-    import TextInput from '$lib/components/TextInput.svelte';
+    import { Button } from '$lib/components/ui/button';
+    import { Input } from '$lib/components/ui/input';
+    import { Label } from '$lib/components/ui/label';
 
     export let data: PageData;
 
@@ -23,17 +24,17 @@
     }
 </script>
 
-<div class="p-2 space-y-3">
+<div class="p-3 space-y-3">
     <div class="flex items-end justify-between">
         <div class="flex gap-2">
-            <!-- <DebouncedInput bind:value={globalFilter} delay={300} /> -->
-
-            <TextInput label="Search for companies" bind:value={searchRaw} />
+            <div class="flex flex-col w-full max-w-sm gap-1.5">
+                <Label for="search">Search for company</Label>
+                <Input type="text" id="search" bind:value={searchRaw} />
+            </div>
         </div>
 
         <div class="flex gap-2">
-            <!-- <Button text="Add User" on:click={() => (newUserOpen = true)} /> -->
-            <LinkButton href="/companies/new" text="Add Company" />
+            <Button href="/companies/new">Add Company</Button>
         </div>
     </div>
 

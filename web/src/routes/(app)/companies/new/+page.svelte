@@ -1,17 +1,17 @@
 <script lang="ts">
-    import { superForm, setMessage } from 'sveltekit-superforms/client';
+    import type { FormOptions } from 'formsnap';
+    import { setMessage } from 'sveltekit-superforms/client';
 
     import type { PageData } from './$types.js';
     import { _newCompanySchema } from './+page.js';
 
     import { goto } from '$app/navigation';
     import { fetchApi } from '$lib';
-    import Button from '$lib/components/Button.svelte';
-    import TextInput from '$lib/components/TextInput.svelte';
+    import * as Form from '$lib/components/ui/form';
 
     export let data: PageData;
 
-    const { form, errors, message, constraints, enhance } = superForm(data.form, {
+    const options: FormOptions<typeof _newCompanySchema> = {
         SPA: true,
         validators: _newCompanySchema,
         onUpdate: async ({ form }) => {
@@ -34,33 +34,27 @@
                 }
             }
         },
-    });
+    };
 </script>
 
 <div class="p-2 space-y-4">
-    {#if $message}<h3>{$message}</h3>{/if}
-    <form
-        class="flex flex-col items-center justify-center w-full max-w-md space-y-4"
-        method="POST"
-        use:enhance
-    >
-        <TextInput
-            label="Name"
-            bind:value={$form.name}
-            errors={$errors.name}
-            constraints={$constraints.name}
-            aria-invalid={$errors.name ? 'true' : undefined}
-        />
+    <Form.Root {options} form={data.form} schema={_newCompanySchema} let:config>
+        <Form.Field {config} name="name">
+            <Form.Item>
+                <Form.Label>Name</Form.Label>
+                <Form.Input />
+                <Form.Validation />
+            </Form.Item>
+        </Form.Field>
 
-        <!-- Location -->
-        <TextInput
-            label="Location"
-            bind:value={$form.location}
-            errors={$errors.location}
-            constraints={$constraints.location}
-            aria-invalid={$errors.location ? 'true' : undefined}
-        />
+        <Form.Field {config} name="location">
+            <Form.Item>
+                <Form.Label>Location</Form.Label>
+                <Form.Input />
+                <Form.Validation />
+            </Form.Item>
+        </Form.Field>
 
-        <Button text="Create Company" type="submit" />
-    </form>
+        <Form.Button>Create Company</Form.Button>
+    </Form.Root>
 </div>

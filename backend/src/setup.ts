@@ -61,6 +61,12 @@ export const elysiaUserBase = new Elysia()
         });
 
         if (!user) {
+            profile.remove({
+                domain: profile.domain,
+                path: profile.path ?? '/',
+                sameSite: profile.sameSite,
+                secure: profile.secure,
+            });
             throw new HttpError(500, 'User not found');
         }
 

@@ -93,7 +93,7 @@ export const AdminAplsRoutes = new Elysia({ prefix: '/apls' })
                 name: t.String(),
                 startDate: t.Number(),
                 endDate: t.Number(),
-                companyId: t.Integer(),
+                companyId: t.Number(),
             }),
         },
     )

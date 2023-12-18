@@ -36,6 +36,8 @@
         <SidebarItem icon="fa-solid:building" text="Företag" href="/companies" />
         <!-- Users -->
         <SidebarItem icon="fa-solid:users" text="Användare" href="/users" />
+        <!-- APLs -->
+        <SidebarItem icon="fa-solid:calendar" text="APL" href="/apls" />
         <!-- Settings -->
         <SidebarItem icon="fa-solid:cog" text="Inställningar" href="/settings" />
     </div>

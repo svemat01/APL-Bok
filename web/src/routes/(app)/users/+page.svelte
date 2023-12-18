@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { PageData } from './$types';
+    import UsersTable from './UsersTable.svelte';
 
     import { page } from '$app/stores';
     import { Button } from '$lib/components/ui/button';
@@ -7,8 +8,6 @@
     import { Label } from '$lib/components/ui/label';
 
     export let data: PageData;
-
-    import UsersTable from './UsersTable.svelte';
 
     let searchRaw = $page.url.searchParams.get('search') ?? '';
 
