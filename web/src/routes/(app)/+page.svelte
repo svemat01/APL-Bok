@@ -2,7 +2,7 @@
     import { fetchApi } from '$lib';
     import SimpleCard from '$lib/components/SimpleCard.svelte';
     import Spinner from '$lib/components/Spinner.svelte';
-    import { assertApiResponse } from '$lib/util/apiHelpers.js';
+    import { assertApiResponse } from '$lib/utils/apiHelpers.js';
     import { createQuery } from '@tanstack/svelte-query';
 
     const summaryQuery = createQuery({

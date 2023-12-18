@@ -1,5 +1,5 @@
 import { fetchApi } from '$lib';
-import { assertApiResponse } from '$lib/util/apiHelpers.js';
+import { assertApiResponse } from '$lib/utils/apiHelpers.js';
 import type { LayoutLoad } from './$types';
 
 export const load = (async () => {
