@@ -14,37 +14,23 @@ export const _permissionsSchema = z.object({
 export const load = (async ({ params, parent }) => {
     const { currentUser } = await parent();
 
-    const userId = parseInt(params.id);
+    const companyId = parseInt(params.id);
 
-    const { data, error } = await fetchApi('/api/admin/users/:userId/', {
+    const { data, error } = await fetchApi('/api/admin/companies/:companyId/', {
         method: 'GET',
         params: {
-            userId,
+            companyId,
         },
     });
 
     handleApiRedirects(error);
 
     if (!data) {
-        throw skError(404, 'User not found');
+        throw skError(404, 'Company not found');
     }
 
-    const permissionRaw = BigInt(data.permissions);
-
-    const permissions = Object.fromEntries(
-        PERMISSIONS.map((perm) => [perm, hasPermission(permissionRaw, PERMISSION[perm])]),
-    );
-
-    // const permissionsForm = superValidate(
-    //     {
-    //         permissions,
-    //     },
-    //     _permissionsSchema,
-    // );
-
     return {
-        user: data,
-        permissions,
-        title: `User ${data.id}`,
+        company: data,
+        title: `Company ${data.id}`,
     };
 }) satisfies PageLoad;

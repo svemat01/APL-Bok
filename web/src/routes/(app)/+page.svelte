@@ -1,6 +1,7 @@
 <script lang="ts">
     import { fetchApi } from '$lib';
     import SimpleCard from '$lib/components/SimpleCard.svelte';
+    import Spinner from '$lib/components/Spinner.svelte';
     import { assertApiResponse } from '$lib/util/apiHelpers.js';
     import { createQuery } from '@tanstack/svelte-query';
 
@@ -29,4 +30,6 @@
         <SimpleCard title="Users" value={$summaryQuery.data.users} />
         <SimpleCard title="Companies" value={$summaryQuery.data.companies} />
     {/if}
+
+    <Spinner />
 </div>

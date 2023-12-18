@@ -15,12 +15,12 @@
     import TBodyRow from '$lib/components/Table/TBodyRow.svelte';
     import TBodyCell from '$lib/components/Table/TBodyCell.svelte';
     import THeadRow from '$lib/components/Table/THeadRow.svelte';
-    import type { User } from './+page.js';
+    import type { APL } from './+page.js';
     import { goto } from '$app/navigation';
     import { rankItem } from '@tanstack/match-sorter-utils';
     import { page } from '$app/stores';
 
-    const fuzzyFilter: FilterFn<User> = (row, columnId, value, addMeta) => {
+    const fuzzyFilter: FilterFn<APL> = (row, columnId, value, addMeta) => {
         // Rank the item
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         const itemRank = rankItem(row.getValue(columnId), value);
@@ -34,20 +34,20 @@
         return itemRank.passed;
     };
 
-    const columnHelper = createColumnHelper<User>();
+    const columnHelper = createColumnHelper<APL>();
 
-    export let data: User[];
+    export let data: APL[];
 
     const defaultColumns = [
-        columnHelper.accessor('firstName', {
-            header: 'First Name',
+        columnHelper.accessor('name', {
+            header: 'Name',
             cell: (props) => props.getValue(),
         }),
-        columnHelper.accessor('lastName', {
-            header: 'Last Name',
+        columnHelper.accessor('company', {
+            header: 'Company',
             cell: (props) => props.getValue(),
         }),
-        columnHelper.accessor('username', {
+        columnHelper.accessor('user', {
             header: 'Username',
             cell: (props) => props.getValue(),
         }),
@@ -59,7 +59,7 @@
 
     export let search = '';
 
-    const options = writable<TableOptions<User>>({
+    const options = writable<TableOptions<APL>>({
         data,
         columns: defaultColumns,
         getCoreRowModel: getCoreRowModel(),
@@ -122,7 +122,7 @@
     </THead>
     <tbody>
         {#each $table.getRowModel().rows as row}
-            <TBodyRow on:click={() => goto(`/users/${row.original.id}`)}>
+            <TBodyRow on:click={() => goto(`/apl/${row.original.id}`)}>
                 {#each row.getVisibleCells() as cell}
                     <TBodyCell>
                         <svelte:component

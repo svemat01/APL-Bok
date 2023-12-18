@@ -10,7 +10,7 @@ export const apl = sqliteTable('apl', {
     name: text("name").notNull(),
     userId: integer("user_id").notNull().references(() => user.id),
     companyId: integer("company_id").notNull().references(() => company.id),
-    mentorId: integer("mentor_id").notNull().references(() => mentor.id),
+    mentorId: integer("mentor_id").references(() => mentor.id),
     startDate: integer("start_date", {mode: 'timestamp'}).notNull(),
     endDate: integer("end_date", {mode: 'timestamp'}).notNull(),
 })

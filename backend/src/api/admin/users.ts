@@ -212,15 +212,48 @@ export const AdminUsersRoutes = new Elysia({ prefix: '/users' })
                             lastName: true,
                             permissions: true,
                         },
+                        with: {
+                            apl: {
+                                columns: {
+                                    id: true,
+                                    name: true,
+                                    startDate: true,
+                                    endDate: true,
+                                },
+                            },
+                            userToGroup: {
+                                columns: {},
+                                with: {
+                                    group: {
+                                        columns: {
+                                            id: true,
+                                            name: true,
+                                        },
+                                    },
+                                },
+                            },
+                        },
                         limit: 1,
                     })
-                    .then((users) => users.at(0));
+                    .then((users) => users.at(0))
 
                 if (!targetUser) {
                     throw new HttpError(400, 'User not found');
                 }
 
-                return targetUser;
+                return {
+                    id: targetUser.id,
+                    username: targetUser.username,
+                    firstName: targetUser.firstName,
+                    lastName: targetUser.lastName,
+                    permissions: targetUser.permissions,
+                    apl: targetUser.apl.map((apl) => ({
+                        ...apl,
+                        startDate: apl.startDate.getTime(),
+                        endDate: apl.endDate.getTime(),
+                    })),
+                    groups: targetUser.userToGroup.map((group) => group.group),
+                };
             }, {
                 response: {
                     ...userAuthResponse,
@@ -230,6 +263,20 @@ export const AdminUsersRoutes = new Elysia({ prefix: '/users' })
                         firstName: t.String(),
                         lastName: t.String(),
                         permissions: t.String(),
+                        apl: t.Array(
+                            t.Object({
+                                id: t.Integer(),
+                                name: t.String(),
+                                startDate: t.Integer(),
+                                endDate: t.Integer(),
+                            }),
+                        ),
+                        groups: t.Array(
+                            t.Object({
+                                id: t.Integer(),
+                                name: t.String(),
+                            }),
+                        ),
                     }),
                 },
                 params: t.Object({

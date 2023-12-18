@@ -5,7 +5,7 @@
     export let currentUser: CurrentUser;
 </script>
 
-<div class="flex justify-between px-5 py-4 bg-neutral-50">
+<div class="flex justify-between px-5 py-4 drop-shadow bg-neutral-50">
     <span class="text-xl font-medium">
         {$page.data.title}
     </span>

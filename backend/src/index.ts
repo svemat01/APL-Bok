@@ -11,6 +11,7 @@ import { HttpError } from './utils/errors.ts';
 import { cors } from '@elysiajs/cors'
 import { randomInt } from "crypto";
 import { isSetup } from './utils/dbHelpers.ts';
+import { eq } from 'drizzle-orm';
 
 // Generate random password
 export const setupPassword = generateSetupPassword();

@@ -7,6 +7,7 @@ import { AdminUsersRoutes } from './users.ts';
 import { AdminReportsRoutes } from './reports.ts';
 import { AdminCompaniesRoutes } from './companies.ts';
 import { countRows } from '../../utils/dbHelpers.ts';
+import { AdminAplsRoutes } from './apl/index.ts';
 
 export const AdminRoutes = new Elysia({ prefix: '/admin' })
     .use(elysiaUserBase)
@@ -39,4 +40,5 @@ export const AdminRoutes = new Elysia({ prefix: '/admin' })
     )
     .use(AdminUsersRoutes)
     .use(AdminReportsRoutes)
-    .use(AdminCompaniesRoutes);
+    .use(AdminCompaniesRoutes)
+    .use(AdminAplsRoutes);
