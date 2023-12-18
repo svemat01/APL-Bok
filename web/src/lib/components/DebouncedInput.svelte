@@ -9,7 +9,7 @@
     const handleChange: FormEventHandler<HTMLInputElement> = (event) => {
         clearTimeout(timer);
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        const tempValue = event.currentTarget?.value as string;
+        const tempValue = event.currentTarget?.value;
 
         timer = setTimeout(() => {
             value = tempValue;

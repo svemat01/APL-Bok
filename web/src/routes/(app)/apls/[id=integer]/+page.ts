@@ -3,7 +3,6 @@ import { error as skError } from '@sveltejs/kit';
 import { handleApiRedirects } from '$lib/utils/apiHelpers.js';
 import type { PageLoad } from './$types';
 import { z } from 'zod';
-import { superValidate } from 'sveltekit-superforms/server';
 import { PERMISSION, PERMISSIONS } from '@apl-bok/backend/src/utils/authHelpers.js';
 import { hasPermission } from 'permissio';
 
