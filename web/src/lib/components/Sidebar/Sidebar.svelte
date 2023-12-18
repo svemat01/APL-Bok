@@ -1,11 +1,13 @@
 <script lang="ts">
+    import Icon from '@iconify/svelte';
+
+    import SidebarItem from './SidebarItem.svelte';
+
     import { goto } from '$app/navigation';
     import { fetchApi } from '$lib';
     // import TiPointOfInterest from "svelte-icons/ti/TiPointOfInterest.svelte";
     // import TiThLarge from "svelte-icons/ti/TiThLarge.svelte";
     // import FaSignOutAlt from 'svelte-icons/fa/FaSignOutAlt.svelte'
-    import Icon from '@iconify/svelte';
-    import SidebarItem from './SidebarItem.svelte';
 
     const logout = async () => {
         const result = await fetchApi('/api/logout', {

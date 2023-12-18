@@ -1,9 +1,11 @@
 <script lang="ts">
     import { superForm, setMessage } from 'sveltekit-superforms/client';
+
     import type { PageData } from './$types.js';
-    import { fetchApi } from '$lib';
-    import { goto } from '$app/navigation';
     import { _newUserSchema } from './+page.js';
+
+    import { goto } from '$app/navigation';
+    import { fetchApi } from '$lib';
 
     export let data: PageData;
 

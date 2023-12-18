@@ -1,8 +1,10 @@
 <script lang="ts">
     import { Button as ButtonPrimitive } from 'bits-ui';
-    import { cn } from '$lib/utils';
+
     import { buttonVariants } from '.';
     import type { Props, Events } from '.';
+
+    import { cn } from '$lib/utils';
 
     type $$Props = Props;
     type $$Events = Events;

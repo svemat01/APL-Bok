@@ -1,9 +1,10 @@
 <script lang="ts">
+    import type { PageData } from './$types';
+    import CompaniesTable from './CompaniesTable.svelte';
+
     import { page } from '$app/stores';
     import LinkButton from '$lib/components/LinkButton.svelte';
     import TextInput from '$lib/components/TextInput.svelte';
-    import type { PageData } from './$types';
-    import CompaniesTable from './CompaniesTable.svelte';
 
     export let data: PageData;
 

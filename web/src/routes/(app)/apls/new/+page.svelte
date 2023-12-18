@@ -1,11 +1,13 @@
 <script lang="ts">
-    import TextInput from '$lib/components/TextInput.svelte';
     import { superForm, setMessage } from 'sveltekit-superforms/client';
+
     import type { PageData } from './$types.js';
     import { _newAplSchema } from './+page.js';
+
+    import { goto } from '$app/navigation';
     import { fetchApi } from '$lib';
     import Button from '$lib/components/Button.svelte';
-    import { goto } from '$app/navigation';
+    import TextInput from '$lib/components/TextInput.svelte';
 
     export let data: PageData;
 

@@ -1,7 +1,9 @@
-import { fetchApi } from '$lib';
-import type { PageLoad } from './$types';
 import { superValidate } from 'sveltekit-superforms/client';
 import { z } from 'zod';
+
+import type { PageLoad } from './$types';
+
+import { fetchApi } from '$lib';
 
 export const _newAplSchema = z.object({
     name: z.string().min(1, 'Name is required'),

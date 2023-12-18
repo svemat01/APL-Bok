@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { writable } from 'svelte/store';
+    import { rankItem } from '@tanstack/match-sorter-utils';
     import type { FilterFn } from '@tanstack/svelte-table';
     import {
         createColumnHelper,
@@ -9,16 +9,18 @@
         getFilteredRowModel,
     } from '@tanstack/svelte-table';
     import type { TableOptions } from '@tanstack/table-core/';
-    import Table from '$lib/components/Table/Table.svelte';
-    import THead from '$lib/components/Table/THead.svelte';
-    import THeaderCell from '$lib/components/Table/THeaderCell.svelte';
-    import TBodyRow from '$lib/components/Table/TBodyRow.svelte';
-    import TBodyCell from '$lib/components/Table/TBodyCell.svelte';
-    import THeadRow from '$lib/components/Table/THeadRow.svelte';
+    import { writable } from 'svelte/store';
+
     import type { APL } from './+page.js';
+
     import { goto } from '$app/navigation';
-    import { rankItem } from '@tanstack/match-sorter-utils';
     import { page } from '$app/stores';
+    import TBodyCell from '$lib/components/Table/TBodyCell.svelte';
+    import TBodyRow from '$lib/components/Table/TBodyRow.svelte';
+    import THead from '$lib/components/Table/THead.svelte';
+    import THeadRow from '$lib/components/Table/THeadRow.svelte';
+    import THeaderCell from '$lib/components/Table/THeaderCell.svelte';
+    import Table from '$lib/components/Table/Table.svelte';
 
     const fuzzyFilter: FilterFn<APL> = (row, columnId, value, addMeta) => {
         // Rank the item

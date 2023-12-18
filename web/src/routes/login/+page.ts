@@ -1,8 +1,10 @@
-import { fetchApi } from '$lib';
 import { redirect } from '@sveltejs/kit';
-import type { PageLoad } from './$types';
 import { superValidate } from 'sveltekit-superforms/client';
 import { z } from 'zod';
+
+import type { PageLoad } from './$types';
+
+import { fetchApi } from '$lib';
 
 export const _setupSchema = z.object({
     username: z.string().toLowerCase(),

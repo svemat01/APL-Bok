@@ -1,9 +1,10 @@
 <script lang="ts">
+    import type { PageData } from './$types';
+
     import { page } from '$app/stores';
     import { Button } from '$lib/components/ui/button';
     import { Input } from '$lib/components/ui/input';
     import { Label } from '$lib/components/ui/label';
-    import type { PageData } from './$types';
 
     export let data: PageData;
 

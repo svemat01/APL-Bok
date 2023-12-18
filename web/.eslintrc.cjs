@@ -2,8 +2,10 @@
 module.exports = {
     root: true,
     extends: [
-        'plugin:@typescript-eslint/recommended-type-checked',
-        'plugin:@typescript-eslint/stylistic-type-checked',
+        // 'plugin:@typescript-eslint/recommended-type-checked',
+        // 'plugin:@typescript-eslint/stylistic-type-checked',
+        'plugin:@typescript-eslint/recommended',
+        'plugin:@typescript-eslint/stylistic',
         'plugin:tailwindcss/recommended',
         'plugin:prettier/recommended',
         'plugin:svelte/recommended',
@@ -69,5 +71,9 @@ module.exports = {
         '@typescript-eslint/no-unsafe-call': 'off',
         '@typescript-eslint/no-unsafe-member-access': 'off',
         '@typescript-eslint/no-unsafe-assignment': 'off',
+
+        // These lint rules are too slow to run on every file
+        '@typescript-eslint/no-misused-promises': 'off',
+        '@typescript-eslint/unbound-method': 'off',
     },
 };

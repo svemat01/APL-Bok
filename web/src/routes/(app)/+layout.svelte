@@ -1,9 +1,10 @@
 <script lang="ts">
+    import type { PageData } from './$types.js';
+
     import { navigating } from '$app/stores';
     import Sidebar from '$lib/components/Sidebar/Sidebar.svelte';
     import Spinner from '$lib/components/Spinner.svelte';
     import Topbar from '$lib/components/Topbar.svelte';
-    import type { PageData } from './$types.js';
 
     export let data: PageData;
 

@@ -1,6 +1,7 @@
-import type { PageLoad } from './$types';
 import { superValidate } from 'sveltekit-superforms/client';
 import { z } from 'zod';
+
+import type { PageLoad } from './$types';
 
 export const _newUserSchema = z.object({
     username: z.string().min(3).toLowerCase(),

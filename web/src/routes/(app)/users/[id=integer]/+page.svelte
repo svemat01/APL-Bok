@@ -1,7 +1,7 @@
 <script lang="ts">
-    import * as Table from '$lib/components/ui/table';
-
     import type { PageData } from './$types';
+
+    import * as Table from '$lib/components/ui/table';
 
     export let data: PageData;
 

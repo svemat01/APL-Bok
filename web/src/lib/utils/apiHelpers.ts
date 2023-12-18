@@ -1,5 +1,6 @@
-import { goto } from '$app/navigation';
 import { z } from 'zod';
+
+import { goto } from '$app/navigation';
 
 const setupRequiredResponse = z.object({
     status: z.literal(412),

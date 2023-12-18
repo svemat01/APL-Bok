@@ -1,8 +1,10 @@
-import { fetchApi } from '$lib';
 import { error as skError } from '@sveltejs/kit';
-import { handleApiRedirects } from '$lib/utils/apiHelpers.js';
-import type { PageLoad } from './$types';
 import { z } from 'zod';
+
+import type { PageLoad } from './$types';
+
+import { fetchApi } from '$lib';
+import { handleApiRedirects } from '$lib/utils/apiHelpers.js';
 
 export const _permissionsSchema = z.object({
     permissions: z.record(z.boolean()),

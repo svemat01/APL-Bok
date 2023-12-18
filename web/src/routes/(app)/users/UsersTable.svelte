@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { writable } from 'svelte/store';
+    import { rankItem } from '@tanstack/match-sorter-utils';
     import type { FilterFn } from '@tanstack/svelte-table';
     import {
         createColumnHelper,
@@ -9,9 +9,11 @@
         getFilteredRowModel,
     } from '@tanstack/svelte-table';
     import type { TableOptions } from '@tanstack/table-core/';
+    import { writable } from 'svelte/store';
+
     import type { User } from './+page.js';
+
     import { goto } from '$app/navigation';
-    import { rankItem } from '@tanstack/match-sorter-utils';
     import { page } from '$app/stores';
     import * as Table from '$lib/components/ui/table';
 

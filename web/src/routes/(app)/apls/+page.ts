@@ -1,6 +1,7 @@
+import type { PageLoad } from './$types';
+
 import { fetchApi } from '$lib';
 import { handleApiRedirects } from '$lib/utils/apiHelpers.js';
-import type { PageLoad } from './$types';
 
 export type APL = {
     id: number;

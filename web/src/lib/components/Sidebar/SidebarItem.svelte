@@ -1,6 +1,7 @@
 <script lang="ts">
-    import { page } from '$app/stores';
     import Icon from '@iconify/svelte';
+
+    import { page } from '$app/stores';
 
     export let icon: string;
     export let text: string;

@@ -1,11 +1,12 @@
 <script lang="ts">
+    import type { PageData } from './$types';
+
     import TBodyCell from '$lib/components/Table/TBodyCell.svelte';
     import TBodyRow from '$lib/components/Table/TBodyRow.svelte';
     import THead from '$lib/components/Table/THead.svelte';
     import THeadRow from '$lib/components/Table/THeadRow.svelte';
     import THeaderCell from '$lib/components/Table/THeaderCell.svelte';
     import Table from '$lib/components/Table/Table.svelte';
-    import type { PageData } from './$types';
 
     export let data: PageData;
 
