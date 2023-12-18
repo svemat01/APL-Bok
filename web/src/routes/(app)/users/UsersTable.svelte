@@ -9,16 +9,11 @@
         getFilteredRowModel,
     } from '@tanstack/svelte-table';
     import type { TableOptions } from '@tanstack/table-core/';
-    import Table from '$lib/components/Table/Table.svelte';
-    import THead from '$lib/components/Table/THead.svelte';
-    import THeaderCell from '$lib/components/Table/THeaderCell.svelte';
-    import TBodyRow from '$lib/components/Table/TBodyRow.svelte';
-    import TBodyCell from '$lib/components/Table/TBodyCell.svelte';
-    import THeadRow from '$lib/components/Table/THeadRow.svelte';
     import type { User } from './+page.js';
     import { goto } from '$app/navigation';
     import { rankItem } from '@tanstack/match-sorter-utils';
     import { page } from '$app/stores';
+    import * as Table from '$lib/components/ui/table';
 
     const fuzzyFilter: FilterFn<User> = (row, columnId, value, addMeta) => {
         // Rank the item
@@ -101,12 +96,13 @@
     const table = createSvelteTable(options);
 </script>
 
-<Table>
-    <THead>
+<Table.Root>
+    <Table.Caption>All Users</Table.Caption>
+    <Table.Header>
         {#each $table.getHeaderGroups() as headerGroup}
-            <THeadRow>
+            <Table.Row>
                 {#each headerGroup.headers as header}
-                    <THeaderCell>
+                    <Table.Head>
                         {#if !header.isPlaceholder}
                             <svelte:component
                                 this={flexRender(
@@ -115,22 +111,22 @@
                                 )}
                             />
                         {/if}
-                    </THeaderCell>
+                    </Table.Head>
                 {/each}
-            </THeadRow>
+            </Table.Row>
         {/each}
-    </THead>
-    <tbody>
+    </Table.Header>
+    <Table.Body>
         {#each $table.getRowModel().rows as row}
-            <TBodyRow on:click={() => goto(`/users/${row.original.id}`)}>
+            <Table.Row on:click={() => goto(`/users/${row.original.id}`)}>
                 {#each row.getVisibleCells() as cell}
-                    <TBodyCell>
+                    <Table.Cell>
                         <svelte:component
                             this={flexRender(cell.column.columnDef.cell, cell.getContext())}
                         />
-                    </TBodyCell>
+                    </Table.Cell>
                 {/each}
-            </TBodyRow>
+            </Table.Row>
         {/each}
-    </tbody>
-</Table>
+    </Table.Body>
+</Table.Root>

@@ -1,5 +1,5 @@
-import { edenFetch } from '@elysiajs/eden';
 import type { App } from '@apl-bok/backend/src';
+import { edenFetch } from '@elysiajs/eden';
 
 // export const app = edenTreaty<App>("")
 export const fetchApi = edenFetch<App>('http://jab-mbp:3000', {

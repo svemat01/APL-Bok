@@ -1,32 +1,11 @@
 <script lang="ts">
-    import TBodyCell from '$lib/components/Table/TBodyCell.svelte';
-    import TBodyRow from '$lib/components/Table/TBodyRow.svelte';
-    import THead from '$lib/components/Table/THead.svelte';
-    import THeadRow from '$lib/components/Table/THeadRow.svelte';
-    import THeaderCell from '$lib/components/Table/THeaderCell.svelte';
-    import Table from '$lib/components/Table/Table.svelte';
+    import * as Table from '$lib/components/ui/table';
+
     import type { PageData } from './$types';
 
     export let data: PageData;
 
     const { user, permissions } = data;
-    // {
-    //     id: number;
-    //     username: string;
-    //     firstName: string;
-    //     lastName: string;
-    //     apl: {
-    //         name: string;
-    //         id: number;
-    //         startDate: number;
-    //         endDate: number;
-    //     }[];
-    //     permissions: string;
-    //     groups: {
-    //         name: string;
-    //         id: number;
-    //     }[];
-    // }
 </script>
 
 <div class="p-2 space-y-3">
@@ -54,26 +33,27 @@
         {#if user.apl.length === 0}
             <p>No APLs</p>
         {:else}
-            <Table>
-                <THead>
-                    <THeadRow>
-                        <THeaderCell>Name</THeaderCell>
-                        <THeaderCell>ID</THeaderCell>
-                        <THeaderCell>Start Date</THeaderCell>
-                        <THeaderCell>End Date</THeaderCell>
-                    </THeadRow>
-                </THead>
-                <tbody>
+            <Table.Root>
+                <Table.Caption>List of APLs</Table.Caption>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.Header>Name</Table.Header>
+                        <Table.Header>ID</Table.Header>
+                        <Table.Header>Start Date</Table.Header>
+                        <Table.Header>End Date</Table.Header>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
                     {#each user.apl as apl}
-                        <TBodyRow>
-                            <TBodyCell>{apl.name}</TBodyCell>
-                            <TBodyCell>{apl.id}</TBodyCell>
-                            <TBodyCell>{apl.startDate}</TBodyCell>
-                            <TBodyCell>{apl.endDate}</TBodyCell>
-                        </TBodyRow>
+                        <Table.Row>
+                            <Table.Cell>{apl.name}</Table.Cell>
+                            <Table.Cell>{apl.id}</Table.Cell>
+                            <Table.Cell>{apl.startDate}</Table.Cell>
+                            <Table.Cell>{apl.endDate}</Table.Cell>
+                        </Table.Row>
                     {/each}
-                </tbody>
-            </Table>
+                </Table.Body>
+            </Table.Root>
         {/if}
     </div>
 
@@ -82,27 +62,23 @@
         {#if user.groups.length === 0}
             <p>No Groups</p>
         {:else}
-            <Table>
-                <THead>
-                    <THeadRow>
-                        <THeaderCell>Name</THeaderCell>
-                        <THeaderCell>ID</THeaderCell>
-                    </THeadRow>
-                </THead>
-                <tbody>
+            <Table.Root>
+                <Table.Caption>List of Groups</Table.Caption>
+                <Table.Header>
+                    <Table.Row>
+                        <Table.Header>Name</Table.Header>
+                        <Table.Header>ID</Table.Header>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
                     {#each user.groups as group}
-                        <tr>
-                            <td>{group.name}</td>
-                            <td>{group.id}</td>
-                        </tr>
+                        <Table.Row>
+                            <Table.Cell>{group.name}</Table.Cell>
+                            <Table.Cell>{group.id}</Table.Cell>
+                        </Table.Row>
                     {/each}
-
-                    <TBodyRow>
-                        <TBodyCell>Yeet</TBodyCell>
-                        <TBodyCell>Yeet</TBodyCell>
-                    </TBodyRow>
-                </tbody>
-            </Table>
+                </Table.Body>
+            </Table.Root>
         {/if}
     </div>
 </div>

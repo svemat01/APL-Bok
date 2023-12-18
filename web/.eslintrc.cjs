@@ -44,6 +44,14 @@ module.exports = {
             { prefer: 'type-imports', fixStyle: 'separate-type-imports' },
         ],
         'import/consistent-type-specifier-style': ['error', 'prefer-top-level'],
+        'import/order': [
+            'error',
+            {
+                alphabetize: { order: 'asc' },
+                groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
+                'newlines-between': 'always',
+            },
+        ],
         'unused-imports/no-unused-imports': 'error',
 
         // For educational purposes we format our comments/jsdoc nicely

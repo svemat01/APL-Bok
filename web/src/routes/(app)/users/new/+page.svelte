@@ -1,11 +1,9 @@
 <script lang="ts">
-    import TextInput from '$lib/components/TextInput.svelte';
     import { superForm, setMessage } from 'sveltekit-superforms/client';
     import type { PageData } from './$types.js';
-    import { _newUserSchema } from './+page.js';
     import { fetchApi } from '$lib';
-    import Button from '$lib/components/Button.svelte';
     import { goto } from '$app/navigation';
+    import { _newUserSchema } from './+page.js';
 
     export let data: PageData;
 
@@ -45,7 +43,7 @@
         method="POST"
         use:enhance
     >
-        <TextInput
+        <!-- <TextInput
             label="Username"
             bind:value={$form.username}
             errors={$errors.username}
@@ -53,7 +51,6 @@
             aria-invalid={$errors.username ? 'true' : undefined}
         />
 
-        <!-- first and last name -->
         <TextInput
             label="First Name"
             bind:value={$form.firstName}
@@ -70,7 +67,6 @@
             aria-invalid={$errors.lastName ? 'true' : undefined}
         />
 
-        <!-- password and password confirm -->
         <TextInput
             label="Password"
             type="text"
@@ -80,6 +76,6 @@
             aria-invalid={$errors.password ? 'true' : undefined}
         />
 
-        <Button text="Create Account" type="submit" />
+        <Button text="Create Account" type="submit" /> -->
     </form>
 </div>

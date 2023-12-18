@@ -1,9 +1,9 @@
 <script lang="ts">
     import { page } from '$app/stores';
-    import LinkButton from '$lib/components/LinkButton.svelte';
-    import TextInput from '$lib/components/TextInput.svelte';
+    import { Button } from '$lib/components/ui/button';
+    import { Input } from '$lib/components/ui/input';
+    import { Label } from '$lib/components/ui/label';
     import type { PageData } from './$types';
-    import AddUserDialog from './AddUserDialog.svelte';
 
     export let data: PageData;
 
@@ -22,25 +22,19 @@
             search = searchRaw;
         }, 300);
     }
-
-    let newUserOpen = false;
 </script>
-
-{#if newUserOpen}
-    <AddUserDialog bind:isOpen={newUserOpen} />
-{/if}
 
 <div class="p-2 space-y-3">
     <div class="flex items-end justify-between">
         <div class="flex gap-2">
-            <!-- <DebouncedInput bind:value={globalFilter} delay={300} /> -->
-
-            <TextInput label="Search for user" bind:value={searchRaw} />
+            <div class="flex flex-col w-full max-w-sm gap-1.5">
+                <Label for="search">Search for user</Label>
+                <Input type="text" id="search" bind:value={searchRaw} />
+            </div>
         </div>
 
         <div class="flex gap-2">
-            <!-- <Button text="Add User" on:click={() => (newUserOpen = true)} /> -->
-            <LinkButton href="/users/new" text="Add User" />
+            <Button href="/users/new">Add User</Button>
         </div>
     </div>
 
