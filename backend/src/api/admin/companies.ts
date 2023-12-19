@@ -115,7 +115,14 @@ export const AdminCompaniesRoutes = new Elysia({ prefix: '/companies' })
                         throw new HttpError(404, 'Company not found');
                     }
 
-                    return company;
+                    return {
+                        ...company,
+                        apl: company.apl.map((apl) => ({
+                            ...apl,
+                            startDate: new Date(apl.startDate).toISOString(),
+                            endDate: new Date(apl.endDate).toISOString(),
+                        })),
+                    }
                 },
                 {
                     response: {
@@ -127,8 +134,12 @@ export const AdminCompaniesRoutes = new Elysia({ prefix: '/companies' })
                                 t.Object({
                                     id: t.Integer(),
                                     name: t.String(),
-                                    startDate: t.String(),
-                                    endDate: t.String(),
+                                    startDate: t.String({
+                                        format: 'date-time'
+                                    }),
+                                    endDate: t.String({
+                                        format: 'date-time'
+                                    }),
                                 }),
                             ),
                             mentor: t.Array(

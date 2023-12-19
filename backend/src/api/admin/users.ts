@@ -220,6 +220,13 @@ export const AdminUsersRoutes = new Elysia({ prefix: '/users' })
                                     startDate: true,
                                     endDate: true,
                                 },
+                                with: {
+                                    company: {
+                                        columns: {
+                                            name: true,
+                                        },
+                                    },
+                                },
                             },
                             userToGroup: {
                                 columns: {},
@@ -249,8 +256,9 @@ export const AdminUsersRoutes = new Elysia({ prefix: '/users' })
                     permissions: targetUser.permissions,
                     apl: targetUser.apl.map((apl) => ({
                         ...apl,
-                        startDate: apl.startDate.getTime(),
-                        endDate: apl.endDate.getTime(),
+                        startDate: apl.startDate.toISOString(),
+                        endDate: apl.endDate.toISOString(),
+                        company: apl.company.name,
                     })),
                     groups: targetUser.userToGroup.map((group) => group.group),
                 };
@@ -267,8 +275,13 @@ export const AdminUsersRoutes = new Elysia({ prefix: '/users' })
                             t.Object({
                                 id: t.Integer(),
                                 name: t.String(),
-                                startDate: t.Integer(),
-                                endDate: t.Integer(),
+                                startDate: t.String({
+                                    format: 'date-time'
+                                }),
+                                endDate: t.String({
+                                    format: 'date-time'
+                                }),
+                                company: t.String(),
                             }),
                         ),
                         groups: t.Array(
@@ -418,8 +431,8 @@ export const AdminUsersRoutes = new Elysia({ prefix: '/users' })
 
                     return apls.map((apl) => ({
                         ...apl,
-                        startDate: apl.startDate.getTime(),
-                        endDate: apl.endDate.getTime(),
+                        startDate: apl.startDate.toISOString(),
+                        endDate: apl.endDate.toISOString(),
                     }));
                 },
                 {
@@ -428,10 +441,14 @@ export const AdminUsersRoutes = new Elysia({ prefix: '/users' })
                             t.Object({
                                 id: t.Integer(),
                                 name: t.String(),
-                                startDate: t.Integer(),
-                                endDate: t.Integer(),
+                                startDate: t.String({
+                                    format: 'date-time'
+                                }),
+                                endDate: t.String({
+                                    format: 'date-time'
+                                }),
                                 companyId: t.Integer(),
-                                mentorId: t.Integer(),
+                                mentorId: t.Nullable(t.Integer()),
                             }),
                         ),
                     },
@@ -465,8 +482,8 @@ export const AdminUsersRoutes = new Elysia({ prefix: '/users' })
                     return reports.map((report) => ({
                         ...report,
                         date: report.date.getTime(),
-                        shiftStart: report.shiftStart.getTime(),
-                        shiftEnd: report.shiftEnd.getTime(),
+                        shiftStart: report.shiftStart.toISOString(),
+                        shiftEnd: report.shiftEnd.toISOString(),
                     }));
                 },
                 {
@@ -478,8 +495,12 @@ export const AdminUsersRoutes = new Elysia({ prefix: '/users' })
                                 comment: t.Nullable(t.String()),
                                 date: t.Integer(),
                                 rating: t.Integer(),
-                                shiftStart: t.Integer(),
-                                shiftEnd: t.Integer(),
+                                shiftStart: t.String({
+                                    format: 'date-time'
+                                }),
+                                shiftEnd: t.String({
+                                    format: 'date-time'
+                                }),
                             }),
                         ),
                     },

@@ -1,12 +1,10 @@
 <script lang="ts">
     export let title: string;
     export let value: string | number;
-
-    let clazz = '';
-    export { clazz as class };
+    import * as Card from '$lib/components/ui/card';
 </script>
 
-<div class={'bg-neutral-100 flex flex-col gap-2 p-4 rounded-2xl ' + clazz}>
+<Card.Root class="p-6">
     <h1 class="text-xl font-normal">{title}</h1>
     <h2 class="text-5xl font-normal">{value}</h2>
-</div>
+</Card.Root>

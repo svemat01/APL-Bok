@@ -10,7 +10,7 @@
 
 <a
     {href}
-    class="flex items-center px-4 text-xl font-normal hover:bg-neutral-700"
+    class="flex items-center px-4 py-3 text-xl font-normal transition-colors rounded-xl"
     class:active={href === '/' ? $page.url.pathname === '/' : $page.url.pathname.startsWith(href)}
 >
     <Icon {icon} class="w-6 h-6 mr-5" />
@@ -19,6 +19,6 @@
 
 <style lang="postcss">
     a.active {
-        @apply text-blue-300;
+        @apply bg-accent-foreground text-primary;
     }
 </style>

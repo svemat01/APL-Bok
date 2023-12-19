@@ -5,9 +5,6 @@
 
     import { goto } from '$app/navigation';
     import { fetchApi } from '$lib';
-    // import TiPointOfInterest from "svelte-icons/ti/TiPointOfInterest.svelte";
-    // import TiThLarge from "svelte-icons/ti/TiThLarge.svelte";
-    // import FaSignOutAlt from 'svelte-icons/fa/FaSignOutAlt.svelte'
 
     const logout = async () => {
         const result = await fetchApi('/api/logout', {
@@ -18,9 +15,41 @@
             await goto('/login');
         }
     };
+
+    const routes: {
+        href: string;
+        icon: string;
+        text: string;
+    }[] = [
+        {
+            href: '/',
+            icon: 'fa-solid:th-list',
+            text: 'Dashboard',
+        },
+        {
+            href: '/companies',
+            icon: 'fa-solid:building',
+            text: 'Företag',
+        },
+        {
+            href: '/users',
+            icon: 'fa-solid:users',
+            text: 'Användare',
+        },
+        {
+            href: '/apls',
+            icon: 'fa-solid:calendar',
+            text: 'APL',
+        },
+        {
+            href: '/settings',
+            icon: 'fa-solid:cog',
+            text: 'Inställningar',
+        },
+    ];
 </script>
 
-<div class="sm:flex flex-col bg-neutral-900 text-neutral-200 p-4 min-w-[15%] hidden">
+<div class="sm:flex flex-col bg-neutral-900 text-neutral-200 p-4 min-w-[13%] hidden">
     <div class="flex flex-col">
         <div class="w-20 h-20 mx-auto">
             <!-- <TiPointOfInterest /> -->
@@ -30,16 +59,9 @@
     </div>
 
     <div class="flex flex-col gap-3 mt-6">
-        <!-- Dashboard -->
-        <SidebarItem icon="fa-solid:th-list" text="Dashboard" href="/" />
-        <!-- Companies -->
-        <SidebarItem icon="fa-solid:building" text="Företag" href="/companies" />
-        <!-- Users -->
-        <SidebarItem icon="fa-solid:users" text="Användare" href="/users" />
-        <!-- APLs -->
-        <SidebarItem icon="fa-solid:calendar" text="APL" href="/apls" />
-        <!-- Settings -->
-        <SidebarItem icon="fa-solid:cog" text="Inställningar" href="/settings" />
+        {#each routes as route}
+            <SidebarItem {...route} />
+        {/each}
     </div>
 
     <div class="flex flex-col mt-auto">

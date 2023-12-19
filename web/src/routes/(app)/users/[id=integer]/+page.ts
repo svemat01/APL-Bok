@@ -6,11 +6,16 @@ import { z } from 'zod';
 import type { PageLoad } from './$types';
 
 import { fetchApi } from '$lib';
+import type { ApiResponse } from '$lib/types/index';
 import { handleApiRedirects } from '$lib/utils/apiHelpers.js';
 
 export const _permissionsSchema = z.object({
     permissions: z.record(z.boolean()),
 });
+
+export type User = ApiResponse<'/api/admin/users/:userId/', 'get', 200>;
+
+export type APL = User['apl'][number];
 
 export const load = (async ({ params, parent }) => {
     const { currentUser } = await parent();

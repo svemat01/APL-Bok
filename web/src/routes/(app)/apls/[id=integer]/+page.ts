@@ -1,51 +1,54 @@
-import { PERMISSION, PERMISSIONS } from '@apl-bok/backend/src/utils/authHelpers.js';
 import { error as skError } from '@sveltejs/kit';
-import { hasPermission } from 'permissio';
 import { z } from 'zod';
 
 import type { PageLoad } from './$types';
 
 import { fetchApi } from '$lib';
+import type { ApiResponse } from '$lib/types/index.js';
 import { handleApiRedirects } from '$lib/utils/apiHelpers.js';
 
 export const _permissionsSchema = z.object({
     permissions: z.record(z.boolean()),
 });
 
-export const load = (async ({ params, parent }) => {
-    const { currentUser } = await parent();
+export type Report = Omit<AplRepsonse['report'][number], 'date' | 'shiftStart' | 'shiftEnd'> & {
+    date: Date;
+    shiftStart: Date;
+    shiftEnd: Date;
+};
 
-    const userId = parseInt(params.id);
+type AplRepsonse = ApiResponse<'/api/admin/apls/:aplId/', 'get', 200>;
 
-    const { data, error } = await fetchApi('/api/admin/users/:userId/', {
+export type Apl = Omit<AplRepsonse, 'report'> & {
+    report: Report[];
+};
+
+export const load = (async ({ params }) => {
+    const aplId = parseInt(params.id);
+
+    const { data, error } = await fetchApi('/api/admin/apls/:aplId/', {
         method: 'GET',
         params: {
-            userId,
+            aplId,
         },
     });
 
     handleApiRedirects(error);
 
     if (!data) {
-        throw skError(404, 'User not found');
+        throw skError(404, 'APL not found');
     }
 
-    const permissionRaw = BigInt(data.permissions);
-
-    const permissions = Object.fromEntries(
-        PERMISSIONS.map((perm) => [perm, hasPermission(permissionRaw, PERMISSION[perm])]),
-    );
-
-    // const permissionsForm = superValidate(
-    //     {
-    //         permissions,
-    //     },
-    //     _permissionsSchema,
-    // );
-
     return {
-        user: data,
-        permissions,
-        title: `User ${data.id}`,
+        apl: {
+            ...data,
+            report: data.report.map((report) => ({
+                ...report,
+                date: new Date(report.date),
+                shiftStart: new Date(report.shiftStart),
+                shiftEnd: new Date(report.shiftEnd),
+            })),
+        } satisfies Apl,
+        title: `APL ${data.id}`,
     };
 }) satisfies PageLoad;

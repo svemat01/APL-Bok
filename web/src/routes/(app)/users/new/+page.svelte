@@ -16,6 +16,8 @@
         SPA: true,
         validators: _newUserSchema,
         onUpdate: async ({ form }) => {
+            if (!form.valid) return;
+
             const response = await fetchApi('/api/admin/users/', {
                 method: 'POST',
                 body: {

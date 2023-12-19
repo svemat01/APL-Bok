@@ -1,11 +1,46 @@
 <script lang="ts">
-    import type { PageData } from './$types';
+    import { createColumnHelper, getCoreRowModel } from '@tanstack/table-core';
+    import type { TableOptions } from '@tanstack/table-core';
+    import { writable } from 'svelte/store';
+    import type { Writable } from 'svelte/store';
 
+    import type { PageData } from './$types';
+    import type { APL } from './+page.js';
+
+    import { goto } from '$app/navigation';
+    import TTable from '$lib/components/TTable.svelte';
+    import * as Card from '$lib/components/ui/card';
     import * as Table from '$lib/components/ui/table';
+    import { df } from '$lib/utils/df.js';
 
     export let data: PageData;
 
     const { user, permissions } = data;
+
+    const aplColumnHelper = createColumnHelper<APL>();
+
+    const aplsTableOptions: Writable<TableOptions<APL>> = writable({
+        data: user.apl,
+        columns: [
+            aplColumnHelper.accessor('name', {
+                header: 'Name',
+                cell: (props) => props.getValue(),
+            }),
+            aplColumnHelper.accessor('company', {
+                header: 'Company',
+                cell: (props) => props.getValue(),
+            }),
+            aplColumnHelper.display({
+                header: 'Period',
+                cell: (props) =>
+                    df.formatRange(
+                        new Date(props.row.original.startDate),
+                        new Date(props.row.original.endDate),
+                    ),
+            }),
+        ],
+        getCoreRowModel: getCoreRowModel(),
+    });
 </script>
 
 <div class="p-2 space-y-3">
@@ -28,8 +63,21 @@
         {/each}
     </details>
 
+    <Card.Root>
+        <Card.Header>
+            <Card.Title>APLs</Card.Title>
+        </Card.Header>
+        <Card.Content class="px-0">
+            <TTable
+                options={aplsTableOptions}
+                onRowClick={(row) => goto(`/apls/${row.original.id}`)}
+                caption="All APLs"
+            />
+        </Card.Content>
+    </Card.Root>
+
     <div class="space-y-2">
-        <h2 class="text-xl">APLs</h2>
+        <!-- <h2 class="text-xl">APLs</h2>
         {#if user.apl.length === 0}
             <p>No APLs</p>
         {:else}
@@ -37,9 +85,9 @@
                 <Table.Caption>List of APLs</Table.Caption>
                 <Table.Header>
                     <Table.Row>
-                        <Table.Header>Name</Table.Header>
-                        <Table.Header>Start Date</Table.Header>
-                        <Table.Header>End Date</Table.Header>
+                        <Table.Head>Name</Table.Head>
+                        <Table.Head>Start Date</Table.Head>
+                        <Table.Head>End Date</Table.Head>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -52,7 +100,7 @@
                     {/each}
                 </Table.Body>
             </Table.Root>
-        {/if}
+        {/if} -->
     </div>
 
     <div class="space-y-2">

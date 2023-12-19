@@ -1,11 +1,13 @@
 <script lang="ts">
+    import type { Readable } from 'svelte/store';
+
     import type { PageData } from './$types';
     import UsersTable from './UsersTable.svelte';
 
     import { page } from '$app/stores';
     import { Button } from '$lib/components/ui/button';
+    import * as Card from '$lib/components/ui/card';
     import { Input } from '$lib/components/ui/input';
-    import { Label } from '$lib/components/ui/label';
 
     export let data: PageData;
 
@@ -22,25 +24,36 @@
             search = searchRaw;
         }, 300);
     }
+
+    let count: Readable<number>;
 </script>
 
-<div class="p-2 space-y-3">
-    <div class="flex items-end justify-between">
-        <div class="flex gap-2">
-            <div class="flex flex-col w-full max-w-sm gap-1.5">
-                <Label for="search">Search for user</Label>
-                <Input type="text" id="search" bind:value={searchRaw} />
+<div class="p-3">
+    <Card.Root>
+        <Card.Header>
+            <div class="flex items-center justify-between">
+                <div class="space-y-2">
+                    <Card.Title>Users</Card.Title>
+                    <Card.Description>
+                        Showing {$count}
+                        {$count === 1 ? 'User' : 'Users'}
+                    </Card.Description>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <Input
+                        type="text"
+                        id="search"
+                        bind:value={searchRaw}
+                        class="w-fit"
+                        placeholder="Search"
+                    />
+                    <Button size="sm" href="/users/new">New</Button>
+                </div>
             </div>
-        </div>
-
-        <div class="flex gap-2">
-            <Button href="/users/new">Add User</Button>
-        </div>
-    </div>
-
-    {#if data.users}
-        <UsersTable data={data.users} {search} />
-    {:else}
-        <div class="p-2">No users found</div>
-    {/if}
+        </Card.Header>
+        <Card.Content class="px-0">
+            <UsersTable data={data.users} {search} bind:count />
+        </Card.Content>
+    </Card.Root>
 </div>

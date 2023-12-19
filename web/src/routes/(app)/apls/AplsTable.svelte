@@ -9,7 +9,7 @@
         getFilteredRowModel,
     } from '@tanstack/svelte-table';
     import type { TableOptions } from '@tanstack/table-core/';
-    import { writable } from 'svelte/store';
+    import { derived, writable } from 'svelte/store';
 
     import type { APL } from './+page.js';
 
@@ -48,10 +48,6 @@
             header: 'Username',
             cell: (props) => props.getValue(),
         }),
-        columnHelper.display({
-            id: 'count',
-            header: (props) => `${props.table.getRowModel().rows.length} users`,
-        }),
     ];
 
     export let search = '';
@@ -81,21 +77,22 @@
 
         let query = new URLSearchParams(oldQuery);
 
-        if (search) {
-            query.set('search', search);
-        }
+        query.set('search', search);
 
         console.log(query.toString());
 
         if (oldQuery !== query.toString()) {
             console.log('goto');
             void goto(`?${query.toString()}`, {
+                replaceState: true,
                 keepFocus: true,
             });
         }
     }
 
     const table = createSvelteTable(options);
+
+    export const count = derived(table, ($table) => $table.getRowModel().rows.length);
 </script>
 
 <Table.Root>
@@ -130,5 +127,16 @@
                 {/each}
             </Table.Row>
         {/each}
+        {#if $table.getRowModel().rows.length === 0}
+            <Table.Row>
+                <Table.Cell colspan={$options.columns.length}>
+                    {#if data.length === 0}
+                        No APLs found
+                    {:else}
+                        No APLs match the search criteria
+                    {/if}
+                </Table.Cell>
+            </Table.Row>
+        {/if}
     </Table.Body>
 </Table.Root>

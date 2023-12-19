@@ -15,6 +15,8 @@
         SPA: true,
         validators: _setupSchema,
         onUpdate: async ({ form }) => {
+            if (!form.valid) return;
+
             const response = await fetchApi('/api/login', {
                 method: 'POST',
                 body: {

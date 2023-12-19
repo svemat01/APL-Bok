@@ -1,11 +1,13 @@
 <script lang="ts">
+    import type { Readable } from 'svelte/store';
+
     import type { PageData } from './$types';
     import AplsTable from './AplsTable.svelte';
 
     import { page } from '$app/stores';
     import { Button } from '$lib/components/ui/button';
+    import * as Card from '$lib/components/ui/card';
     import { Input } from '$lib/components/ui/input';
-    import { Label } from '$lib/components/ui/label';
 
     export let data: PageData;
 
@@ -22,25 +24,36 @@
             search = searchRaw;
         }, 300);
     }
+
+    let count: Readable<number>;
 </script>
 
-<div class="p-2 space-y-3">
-    <div class="flex items-end justify-between">
-        <div class="flex gap-2">
-            <div class="flex flex-col w-full max-w-sm gap-1.5">
-                <Label for="search">Search for APL</Label>
-                <Input type="text" id="search" bind:value={searchRaw} />
+<div class="p-3">
+    <Card.Root>
+        <Card.Header>
+            <div class="flex items-center justify-between">
+                <div class="space-y-2">
+                    <Card.Title>APLs</Card.Title>
+                    <Card.Description>
+                        Showing {$count}
+                        {$count === 1 ? 'APL' : 'APLs'}
+                    </Card.Description>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <Input
+                        type="text"
+                        id="search"
+                        bind:value={searchRaw}
+                        class="w-fit"
+                        placeholder="Search"
+                    />
+                    <Button size="sm" href="/apls/new">Add APL</Button>
+                </div>
             </div>
-        </div>
-
-        <div class="flex gap-2">
-            <Button href="/apls/new">Add APL</Button>
-        </div>
-    </div>
-
-    {#if data.users}
-        <AplsTable data={data.users} {search} />
-    {:else}
-        <div class="p-2">No apls found</div>
-    {/if}
+        </Card.Header>
+        <Card.Content class="px-0">
+            <AplsTable data={data.apls} {search} bind:count />
+        </Card.Content>
+    </Card.Root>
 </div>

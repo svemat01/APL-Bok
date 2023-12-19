@@ -7,8 +7,8 @@ export type APL = {
     id: number;
     name: string;
     company: string;
-    startDate: number;
-    endDate: number;
+    startDate: string;
+    endDate: string;
     user: string;
 };
 
@@ -19,8 +19,11 @@ export const load = (async () => {
 
     handleApiRedirects(error);
 
+    // sleep 1 second to show loading
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     return {
-        users: data satisfies APL[] | null,
+        apls: (data ?? []) satisfies APL[],
         title: 'APLs',
     };
 }) satisfies PageLoad;

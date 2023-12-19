@@ -9,15 +9,16 @@
         getFilteredRowModel,
     } from '@tanstack/svelte-table';
     import type { TableOptions } from '@tanstack/table-core/';
-    import { derived, writable } from 'svelte/store';
+    import { writable } from 'svelte/store';
 
-    import type { User } from './+page.js';
+    import type { Report } from './+page.js';
 
     import { goto } from '$app/navigation';
     import { page } from '$app/stores';
     import * as Table from '$lib/components/ui/table';
+    import { df } from '$lib/utils/df.js';
 
-    const fuzzyFilter: FilterFn<User> = (row, columnId, value, addMeta) => {
+    const fuzzyFilter: FilterFn<Report> = (row, columnId, value, addMeta) => {
         // Rank the item
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         const itemRank = rankItem(row.getValue(columnId), value);
@@ -31,29 +32,31 @@
         return itemRank.passed;
     };
 
-    const columnHelper = createColumnHelper<User>();
+    const columnHelper = createColumnHelper<Report>();
 
-    export let data: User[];
+    export let reports: Report[];
+    export let aplId: number;
 
     const defaultColumns = [
-        columnHelper.accessor('firstName', {
-            header: 'First Name',
-            cell: (props) => props.getValue(),
+        columnHelper.accessor('date', {
+            header: 'Date',
+            cell: (props) => df.format(props.getValue()),
         }),
-        columnHelper.accessor('lastName', {
-            header: 'Last Name',
-            cell: (props) => props.getValue(),
+        columnHelper.accessor('rating', {
+            header: 'Rating',
+            cell: (props) => `${props.getValue()}/5`,
         }),
-        columnHelper.accessor('username', {
-            header: 'Username',
-            cell: (props) => props.getValue(),
+        columnHelper.display({
+            header: 'Shift',
+            cell: (props) =>
+                df.formatRange(props.row.original.shiftStart, props.row.original.shiftEnd),
         }),
     ];
 
     export let search = '';
 
-    const options = writable<TableOptions<User>>({
-        data,
+    const options = writable<TableOptions<Report>>({
+        data: reports,
         columns: defaultColumns,
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
@@ -92,12 +95,10 @@
     }
 
     const table = createSvelteTable(options);
-
-    export const count = derived(table, ($table) => $table.getRowModel().rows.length);
 </script>
 
-<Table.Root>
-    <Table.Caption>All Users</Table.Caption>
+<Table.Root class="">
+    <Table.Caption>All Reports</Table.Caption>
     <Table.Header>
         {#each $table.getHeaderGroups() as headerGroup}
             <Table.Row>
@@ -118,7 +119,7 @@
     </Table.Header>
     <Table.Body>
         {#each $table.getRowModel().rows as row}
-            <Table.Row on:click={() => goto(`/users/${row.original.id}`)}>
+            <Table.Row on:click={() => goto(`/apls/aplId/${aplId}/reports/${row.original.id}`)}>
                 {#each row.getVisibleCells() as cell}
                     <Table.Cell>
                         <svelte:component
@@ -128,16 +129,5 @@
                 {/each}
             </Table.Row>
         {/each}
-        {#if $table.getRowModel().rows.length === 0}
-            <Table.Row>
-                <Table.Cell colspan={$options.columns.length}>
-                    {#if data.length === 0}
-                        No users found
-                    {:else}
-                        No users match the search criteria
-                    {/if}
-                </Table.Cell>
-            </Table.Row>
-        {/if}
     </Table.Body>
 </Table.Root>

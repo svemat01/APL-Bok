@@ -6,7 +6,7 @@ import type { PageLoad } from './$types';
 import { fetchApi } from '$lib';
 
 export const _newAplSchema = z.object({
-    name: z.string().min(1, 'Name is required'),
+    name: z.string().min(5, 'Name is required'),
     companyId: z.number(),
     date: z.string().min(1, 'Date is required'),
 });

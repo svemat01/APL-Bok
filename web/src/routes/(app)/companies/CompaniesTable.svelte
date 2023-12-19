@@ -9,7 +9,7 @@
         getFilteredRowModel,
     } from '@tanstack/svelte-table';
     import type { TableOptions } from '@tanstack/table-core/';
-    import { writable } from 'svelte/store';
+    import { derived, writable } from 'svelte/store';
 
     import type { Company } from './+page.js';
 
@@ -43,10 +43,6 @@
         columnHelper.accessor('location', {
             header: 'Location',
             cell: (props) => props.getValue(),
-        }),
-        columnHelper.display({
-            id: 'count',
-            header: (props) => `${props.table.getRowModel().rows.length} users`,
         }),
     ];
 
@@ -92,6 +88,8 @@
     }
 
     const table = createSvelteTable(options);
+
+    export const count = derived(table, ($table) => $table.getRowModel().rows.length);
 </script>
 
 <Table.Root>

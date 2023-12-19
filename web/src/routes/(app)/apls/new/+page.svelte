@@ -14,7 +14,6 @@
     import * as Popover from '$lib/components/ui/popover';
     import { RangeCalendar } from '$lib/components/ui/range-calendar';
     import { cn } from '$lib/utils/index.js';
-
     export let data: PageData;
 
     // const options: FormOptions<typeof _newAplSchema> = ;
@@ -23,6 +22,8 @@
         SPA: true,
         validators: _newAplSchema,
         onUpdate: async ({ form }) => {
+            if (!form.valid) return;
+
             const [startRaw, endRaw] = form.data.date.split(',');
             const startDate = new Date(startRaw).getTime();
             const endDate = new Date(endRaw).getTime();
@@ -64,35 +65,7 @@
         : undefined;
 </script>
 
-<div class="p-2 space-y-4">
-    <!-- {#if $message}<h3>{$message}</h3>{/if}
-    <form
-        class="flex flex-col items-center justify-center w-full max-w-md space-y-4"
-        method="POST"
-        use:enhance
-    >
-        <TextInput
-            label="Name"
-            bind:value={$form.name}
-            errors={$errors.name}
-            constraints={$constraints.name}
-            aria-invalid={$errors.name ? 'true' : undefined}
-        />
-
-        <select
-            class="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline"
-            bind:value={$form.companyId}
-            aria-invalid={$errors.companyId ? 'true' : undefined}
-        >
-            <option value="">Select a company</option>
-            {#each data.companies as company}
-                <option value={company.id}>{company.name}</option>
-            {/each}
-        </select>
-
-        <Button text="Create Account" type="submit" />
-    </form> -->
-
+<div class="p-3 space-y-4">
     <Form.Root controlled {form} schema={_newAplSchema} let:config>
         <Form.Field {config} name="name">
             <Form.Item>
@@ -103,21 +76,11 @@
         </Form.Field>
 
         <Form.Field {config} name="companyId">
-            <Form.Item>
+            <Form.Item class="">
                 <Form.Label>Company</Form.Label>
-                <!-- <select
-                    class="w-full px-3 py-2 text-base text-gray-700 placeholder-gray-600 border rounded-lg appearance-none focus:shadow-outline"
-                    bind:value={$form.companyId}
-                    aria-invalid={$errors.companyId ? 'true' : undefined}
-                >
-                    <option value="">Select a company</option>
-                    {#each data.companies as company}
-                        <option value={company.id}>{company.name}</option>
-                    {/each}
-                </select> -->
                 <Form.Select>
                     <Form.SelectTrigger placeholder="Select a company" />
-                    <Form.SelectContent>
+                    <Form.SelectContent class="h-64">
                         {#each data.companies as company}
                             <Form.SelectItem value={company.id}>{company.name}</Form.SelectItem>
                         {/each}
@@ -126,14 +89,6 @@
                 <Form.Validation />
             </Form.Item>
         </Form.Field>
-
-        <!-- <Form.Field {config} name="startDate">
-            <Form.Item>
-                <Form.Label>Start Date</Form.Label>
-                <Form.Input type="date" />
-                <Form.Validation />
-            </Form.Item>
-        </Form.Field> -->
 
         <Form.Field {config} name="date">
             <Form.Item>
@@ -145,40 +100,31 @@
                             {...attrs}
                             class={cn(
                                 buttonVariants({ variant: 'outline' }),
-                                'w-[280px] pl-4 justify-start text-left font-normal',
+                                'pl-4 justify-start text-left font-normal space-x-2',
                                 !value && 'text-muted-foreground',
                             )}
                         >
-                            {#if value && value.start}
-                                {#if value.end}
-                                    {df.format(value.start.toDate(getLocalTimeZone()))} - {df.format(
+                            <span>
+                                {#if value?.start && value?.end}
+                                    <!-- {#if value.end}
+                                        {df.format(value.start.toDate(getLocalTimeZone()))} - {df.format(
+                                            value.end.toDate(getLocalTimeZone()),
+                                        )}
+                                    {:else}
+                                        {df.format(value.start.toDate(getLocalTimeZone()))}
+                                    {/if} -->
+                                    {df.formatRange(
+                                        value.start.toDate(getLocalTimeZone()),
                                         value.end.toDate(getLocalTimeZone()),
                                     )}
                                 {:else}
-                                    {df.format(value.start.toDate(getLocalTimeZone()))}
+                                    Pick a date
                                 {/if}
-                            {:else}
-                                Pick a date
-                            {/if}
+                            </span>
                             <CalendarIcon class="w-4 h-4 ml-auto opacity-50" />
                         </Popover.Trigger>
                     </Form.Control>
                     <Popover.Content class="w-auto p-0" side="top">
-                        <!-- <Calendar
-                            bind:value
-                            bind:placeholder
-                            minValue={new CalendarDate(1900, 1, 1)}
-                            maxValue={today(getLocalTimeZone())}
-                            calendarLabel="Date of birth"
-                            initialFocus
-                            onValueChange={(v) => {
-                                if (v) {
-                                    $formStore.dob = v.toString();
-                                } else {
-                                    $formStore.dob = '';
-                                }
-                            }}
-                        /> -->
                         <RangeCalendar
                             bind:value
                             initialFocus

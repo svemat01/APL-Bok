@@ -15,6 +15,8 @@
         SPA: true,
         validators: _newCompanySchema,
         onUpdate: async ({ form }) => {
+            if (!form.valid) return;
+
             const response = await fetchApi('/api/admin/companies/', {
                 method: 'POST',
                 body: {

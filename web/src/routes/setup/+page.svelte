@@ -21,6 +21,8 @@
                 return;
             }
 
+            if (!form.valid) return;
+
             const response = await fetchApi('/api/setup', {
                 method: 'POST',
                 body: {

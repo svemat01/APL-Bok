@@ -17,7 +17,7 @@ export const load = (async () => {
     handleApiRedirects(error);
 
     return {
-        companies: data satisfies Company[] | null,
+        companies: (data ?? []) satisfies Company[] | null,
         title: 'Companies',
     };
 }) satisfies PageLoad;

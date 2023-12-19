@@ -38,8 +38,8 @@ export const AdminAplsRoutes = new Elysia({ prefix: '/apls' })
             return apls.map((apl) => ({
                 id: apl.id,
                 name: apl.name,
-                startDate: apl.startDate.getTime(),
-                endDate: apl.endDate.getTime(),
+                startDate: apl.startDate.toISOString(),
+                endDate: apl.endDate.toISOString(),
                 company: apl.company.name,
                 user: `${apl.user.firstName} ${apl.user.lastName}`
             }));
@@ -50,8 +50,12 @@ export const AdminAplsRoutes = new Elysia({ prefix: '/apls' })
                     t.Object({
                         id: t.Integer(),
                         name: t.String(),
-                        startDate: t.Number(),
-                        endDate: t.Number(),
+                        startDate: t.String({
+                            format: 'date-time'
+                        }),
+                        endDate: t.String({
+                            format: 'date-time'
+                        }),
                         company: t.String(),
                         user: t.String(),
                     }),
@@ -137,6 +141,7 @@ export const AdminAplsRoutes = new Elysia({ prefix: '/apls' })
                                         rating: true,
                                         shiftStart: true,
                                         shiftEnd: true,
+                                        comment: true,
                                     },
                                 },
                                 user: {
@@ -156,13 +161,13 @@ export const AdminAplsRoutes = new Elysia({ prefix: '/apls' })
 
                     return {
                         ...apl,
-                        startDate: apl.startDate.getTime(),
-                        endDate: apl.endDate.getTime(),
+                        startDate: apl.startDate.toISOString(),
+                        endDate: apl.endDate.toISOString(),
                         report: apl.report.map((report) => ({
                             ...report,
-                            date: report.date.getTime(),
-                            shiftStart: report.shiftStart.getTime(),
-                            shiftEnd: report.shiftEnd.getTime(),
+                            date: report.date.toISOString(),
+                            shiftStart: report.shiftStart.toISOString(),
+                            shiftEnd: report.shiftEnd.toISOString(),
                         })),
                     }
                 },
@@ -171,8 +176,12 @@ export const AdminAplsRoutes = new Elysia({ prefix: '/apls' })
                         200: t.Object({
                             id: t.Integer(),
                             name: t.String(),
-                            startDate: t.Integer(),
-                            endDate: t.Integer(),
+                            startDate: t.String({
+                                format: 'date-time'
+                            }),
+                            endDate: t.String({
+                                format: 'date-time'
+                            }),
                             company: t.Object({
                                 id: t.Integer(),
                                 name: t.String(),
@@ -186,10 +195,16 @@ export const AdminAplsRoutes = new Elysia({ prefix: '/apls' })
                             report: t.Array(
                                 t.Object({
                                     id: t.Integer(),
-                                    date: t.Integer(),
+                                    date: t.String({
+                                        format: 'date-time'
+                                    }),
                                     rating: t.Integer(),
-                                    shiftStart: t.Integer(),
-                                    shiftEnd: t.Integer(),
+                                    shiftStart: t.String({
+                                        format: 'date-time'
+                                    }),
+                                    shiftEnd: t.String({
+                                        format: 'date-time'
+                                    }),
                                 }),
                             ),
                             user: t.Object({
@@ -239,8 +254,12 @@ export const AdminAplsRoutes = new Elysia({ prefix: '/apls' })
                     }),
                     body: t.Object({
                         name: t.String(),
-                        startDate: t.Number(),
-                        endDate: t.Number(),
+                        startDate: t.String({
+                            format: 'date-time'
+                        }),
+                        endDate: t.String({
+                            format: 'date-time'
+                        }),
                     }),
                 },
             )
